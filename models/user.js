@@ -2,7 +2,7 @@ var connection = require("./connection");
 var Sequelize = connection.Sequelize;
 var sequelize = connection.sequelize;
 
-var User = sequalize.define("user", {
+var User = sequelize.define("user", {
   email: {
     type: Sequelize.STRING(64),
     validate: {is: /^[a-f0-9]{64}$/i},
