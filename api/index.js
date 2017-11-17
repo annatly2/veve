@@ -73,10 +73,27 @@ function hashPassword(password, salt) {
   return crypto.pbkdf2Sync(password, salt, 50000, 256, "sha512").toString("hex");
 }
 
+function encrypt(plaintext, key) {
+  throw new Error("not yet implemented")
+  // return new Promise(function(resolve, reject) {
+  //
+  // });
+}
+
+function decrypt(ciphertext, key) {
+  throw new Error("not yet implemented")
+}
+
 // Models
 
 var models = require("../models");
 var User = models.User;
+
+function createUser(email, password, username) {
+  var emailHash = hash(email);
+  var salt = newSalt(email);
+  var saltedPassword = hashPassword(password, salt);
+}
 
 function getUser(email) {
   var emailHash = hash(email);
