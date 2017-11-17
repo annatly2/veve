@@ -17,4 +17,10 @@ var User = sequelize.define("user", {
   },
 });
 
+User.associate = function(models){
+  User.hasMany(models.Garment, {
+    onDelete: "cascade"
+  });
+};
+
 module.exports = User;
