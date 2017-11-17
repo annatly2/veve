@@ -13,7 +13,7 @@ var Garment = sequelize.define("garment", {
     type: Sequelize.STRING
   },
   image:{
-    type: Sequelize.STRING
+    type: Sequelize.TEXT
   },
   closet:{
     type: Sequelize.STRING
