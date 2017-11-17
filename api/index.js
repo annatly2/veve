@@ -4,9 +4,7 @@ var router = express.Router();
 
 router.post("/signup", function(req, res) {
   /*  TODO:
-      Check if email already exists in database
-      Return error if email has already been registered
-      Or return OK after user has been generated and redirect to profile page
+      Deal with session tokens
   */
   getUser(req.body.email)
     .then(function(user) {
@@ -31,11 +29,7 @@ router.post("/signup", function(req, res) {
 
 router.post("/login", function(req, res) {
   /*  TODO:
-      Check if email exists in database
-      Return error if email does not exist
-      Or check if password is correct
-      Return error if password is incorrect
-      Or return OK and redirect to profile page
+      Deal with session tokens
   */
   verifyUser(req.body.email, req.body.password)
     .then(function(verified) {
