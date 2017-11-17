@@ -162,11 +162,11 @@ function getUser(email) {
       email: emailHash
     }
   })
-  .then(function(results) {
-    if (results.length < 1) {
+  .then(function(result) {
+    if (result === null) {
       return null;
     }
-    return results[0];
+    return result;
   })
 }
 
@@ -176,7 +176,7 @@ function verifyUser(email, password) {
     if (user === null) {
       throw new Error("email not registered");
     }
-    var toCheck = hashPassword(password, user.salt);
-    return toCheck === user.password;
+    var toCheck = hashPassword(password, user.dataValues.salt);
+    return toCheck === user.dataValues.password;
   })
 }
