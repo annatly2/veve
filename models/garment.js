@@ -17,11 +17,10 @@ var Garment = sequelize.define("garment", {
   },
   closet:{
     type: Sequelize.STRING
-  }
+  },
 });
 
 Garment.associate = function(models){
-
   Garment.belongsTo(models.User, {
     foreignKey: {
       allowNull: false

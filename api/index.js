@@ -53,6 +53,37 @@ router.post("/login", function(req, res) {
     })
 });
 
+router.get("/clothes", function(req,res){
+  var query = {};
+  if(req.query.email){
+    query.Email = req.query.email;
+  }
+  models.Garment.findAll({
+    where: query,
+    include: [models.User]
+  }).then(function(dbGarment){
+    res.json(dbGarment);
+  });
+});
+
+router.post("/clothes", function(req,res){
+  models.Garment.create(req.body).then(function(dbGarment){
+    res.json(dbGarment);
+  });
+});
+
+router.put("/clothes", function(req,res){
+  models.Garment.update(
+    req.body,
+    {
+      where: {
+        name: req.body.name
+      }
+    }).then(function(dbGarment){
+      res.json(dbGarment);
+    });
+});
+
 module.exports = router;
 
 // Crypto
@@ -88,6 +119,8 @@ function decrypt(ciphertext, key) {
 
 var models = require("../models");
 var User = models.User;
+var Garment = models.Garment;
+
 
 function createUser(email, password, username) {
   var emailHash = hash(email);

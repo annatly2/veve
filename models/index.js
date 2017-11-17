@@ -1,4 +1,5 @@
 var user = require("./user");
+var garment = require("./garment");
 
 var options = {};
 if (process.env.NODE_ENV === "development") {
@@ -6,8 +7,9 @@ if (process.env.NODE_ENV === "development") {
 }
 
 user.sync(options)
-  // .then() // sync other models; order might matter
+  .then(garment.sync(options)) // sync other models; order might matter
 
 module.exports = {
+  Garment: garment,
   User: user,
 };
