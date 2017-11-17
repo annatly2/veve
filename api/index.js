@@ -105,14 +105,41 @@ function hashPassword(password, salt) {
 }
 
 function encrypt(plaintext, key) {
-  throw new Error("not yet implemented")
-  // return new Promise(function(resolve, reject) {
-  //
-  // });
+  return new Promise(function(resolve, reject) {
+    let cipher = crypto.createCipher("aes256", key);
+    let encrypted = "";
+
+    cipher.on("readable", function() {
+      let data = cipher.read();
+      if (data) encrypted += data.toString("hex");
+    });
+
+    cipher.on("end", function() {
+      resolve(encrypted);
+    });
+
+    cipher.write(plaintext);
+    cipher.end();
+  });
 }
 
 function decrypt(ciphertext, key) {
-  throw new Error("not yet implemented")
+  return new Promise(function(resolve, reject) {
+    let decipher = crypto.createDecifer("aes256", key);
+    let decrypted = "";
+
+    decipher.on("readable", function() {
+      let data = decipher.read();
+      if (data) decrypted += data.toString("utf8");
+    });
+
+    decipher.on("end", function() {
+      resolve(decrypted);
+    });
+
+    decipher.write(ciphertext, "hex");
+    decipher.end();
+  });
 }
 
 // Models
