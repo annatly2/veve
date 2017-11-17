@@ -148,11 +148,27 @@ var models = require("../models");
 var User = models.User;
 var Garment = models.Garment;
 
-
 function createUser(email, password, username) {
-  var emailHash = hash(email);
-  var salt = newSalt(email);
-  var saltedPassword = hashPassword(password, salt);
+  return new Promise(function(resolve, reject) {
+    var emailHash = hash(email);
+    var salt = newSalt(email);
+    var saltedPassword = hashPassword(password, salt);
+    return encrypt(username, salt)
+      .then(function(encryptedUsername) {
+        return {
+          email:    emailHash,
+          salt:     salt,
+          password: saltedPassword,
+          username: encryptedUsername
+        }
+      })
+      .then(function(user) {
+        return User.create(user)
+          .then(function(user) {
+            resolve(user);
+          })
+      })
+  })
 }
 
 function getUser(email) {
