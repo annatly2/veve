@@ -104,12 +104,72 @@ function hashPassword(password, salt) {
   return crypto.pbkdf2Sync(password, salt, 50000, 256, "sha512").toString("hex");
 }
 
+function encrypt(plaintext, key) {
+  return new Promise(function(resolve, reject) {
+    let cipher = crypto.createCipher("aes256", key);
+    let encrypted = "";
+
+    cipher.on("readable", function() {
+      let data = cipher.read();
+      if (data) encrypted += data.toString("hex");
+    });
+
+    cipher.on("end", function() {
+      resolve(encrypted);
+    });
+
+    cipher.write(plaintext);
+    cipher.end();
+  });
+}
+
+function decrypt(ciphertext, key) {
+  return new Promise(function(resolve, reject) {
+    let decipher = crypto.createDecifer("aes256", key);
+    let decrypted = "";
+
+    decipher.on("readable", function() {
+      let data = decipher.read();
+      if (data) decrypted += data.toString("utf8");
+    });
+
+    decipher.on("end", function() {
+      resolve(decrypted);
+    });
+
+    decipher.write(ciphertext, "hex");
+    decipher.end();
+  });
+}
+
 // Models
 
 var models = require("../models");
 var User = models.User;
 var Garment = models.Garment;
 
+function createUser(email, password, username) {
+  return new Promise(function(resolve, reject) {
+    var emailHash = hash(email);
+    var salt = newSalt(email);
+    var saltedPassword = hashPassword(password, salt);
+    return encrypt(username, salt)
+      .then(function(encryptedUsername) {
+        return {
+          email:    emailHash,
+          salt:     salt,
+          password: saltedPassword,
+          username: encryptedUsername
+        }
+      })
+      .then(function(user) {
+        return User.create(user)
+          .then(function(user) {
+            resolve(user);
+          })
+      })
+  })
+}
 
 function getUser(email) {
   var emailHash = hash(email);
@@ -118,11 +178,11 @@ function getUser(email) {
       email: emailHash
     }
   })
-  .then(function(results) {
-    if (results.length < 1) {
+  .then(function(result) {
+    if (result === null) {
       return null;
     }
-    return results[0];
+    return result;
   })
 }
 
@@ -132,7 +192,7 @@ function verifyUser(email, password) {
     if (user === null) {
       throw new Error("email not registered");
     }
-    var toCheck = hashPassword(password, user.salt);
-    return toCheck === user.password;
+    var toCheck = hashPassword(password, user.dataValues.salt);
+    return toCheck === user.dataValues.password;
   })
 }
