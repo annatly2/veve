@@ -15,6 +15,9 @@ var User = sequelize.define("user", {
     type: Sequelize.STRING(512),
     validate: {is: /^[a-f0-9]{512}$/i},
   },
+  username: {
+    type: Sequelize.STRING
+  }
 });
 
 User.associate = function(models){
