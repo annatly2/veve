@@ -8,6 +8,7 @@ app.use(bodyparser.urlencoded({extended: false}));
 app.use(bodyparser.json());
 
 app.use(express.static("public"));
+app.use("/api", require("./api"));
 
 app.listen(PORT, function() {
   console.log(`App listening at http://localhost:${PORT}`);
