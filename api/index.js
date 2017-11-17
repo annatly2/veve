@@ -37,7 +37,26 @@ router.post("/login", function(req, res) {
       Return error if password is incorrect
       Or return OK and redirect to profile page
   */
-  res.sendStatus(200);
+  verifyUser(req.body.email, req.body.password)
+    .then(function(verified) {
+      if (verified) {
+        res.json({
+          error: false,
+          session: "TODO"
+        })
+      } else {
+        res.json({
+          error: true,
+          errorMsg: "password not correct"
+        })
+      }
+    })
+    .catch(function(err) {
+      return res.json({
+        error: true,
+        errorMsg: err
+      })
+    })
 });
 
 module.exports = router;
@@ -77,5 +96,16 @@ function getUser(email) {
       return null;
     }
     return results[0];
+  })
+}
+
+function verifyUser(email, password) {
+  return getUser(email)
+  .then(function(user) {
+    if (user === null) {
+      throw new Error("email not registered");
+    }
+    var toCheck = hashPassword(password, user.salt);
+    return toCheck === user.password;
   })
 }
