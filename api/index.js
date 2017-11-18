@@ -143,6 +143,10 @@ module.exports = function(app) {
         return accessDenied(req, res);
       }
 
+      if (req.body.username == undefined) {
+        return accessDenied(req,res);
+      }
+
       uu.delete(header.name, header.pass, req.body.username)
         .then(function(result) {
           res.json({
@@ -220,10 +224,12 @@ module.exports = function(app) {
     }
   );
 
-  router.delete("/clothes", function(req, res){
-    models.Garment.destroy({
+  router.delete("/clothes", jwtauth, function(req, res){
+    var garment = req.body;
+
+    Garment.destroy({
       where: {
-        name: req.body.name
+        id: garment.id
       }
     }).then(function(dbGarment){
       res.json(dbGarment);
