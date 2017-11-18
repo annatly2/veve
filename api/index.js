@@ -103,6 +103,77 @@ module.exports = function(app) {
     }
   );
 
+  router.put("/account",
+    jwtauth,
+    function(req, res) {
+      console.log(req.user)
+      if (req.user == null) {
+        res.sendStatus(401);
+        return res.end();
+      }
+
+      var header = auth(req);
+      if (header == undefined) {
+        res.sendStatus(401);
+        return res.end();
+      }
+
+      if (req.body == undefined) {
+        return res.json({
+          error: true,
+          errorMsg: "must provide updated values"
+        })
+      }
+
+      if (req.body.email == undefined || req.body.password == undefined || req.body.username == undefined) {
+        return res.json({
+          error: true,
+          errorMsg: "must provide all updated values"
+        })
+      }
+
+      return uu.update(header.name, req.body)
+        .then(function(result) {
+          res.json({
+            error: false
+          })
+        })
+        .catch(function(err) {
+          res.json({
+            error: true,
+            errorMsg: err.message
+          })
+        })
+    }
+  );
+
+  router.delete("/account",
+    jwtauth,
+    function(req, res) {
+      if (req.user === undefined) {
+        res.sendStatus(401);
+        return res.end();
+      }
+
+      var header = auth(req);
+      if (header === undefined) {
+        res.sendStatus(401);
+        return res.end();
+      }
+
+      uu.delete(header.name, header.pass, req.body.username)
+        .then(function(result) {
+          res.json({
+            error: false
+          });
+        })
+        .catch(function(err) {
+          res.sendStatus(401);
+          return res.end();
+        })
+    }
+  );
+
   router.get("/clothes/:closet",
     jwtauth,
     function(req, res) {

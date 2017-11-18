@@ -40,12 +40,35 @@ module.exports = {
   get: getUser,
   verify: verifyUser,
 
+  update: function(email, values) {
+    return getUser(email)
+      .then(function(user) {
+        if (user === null) throw new Error("user not found");
+        var hashEmail = cu.hashSync(values.email);
+        var salt = cu.newSaltSync(values.email);
+        var makePassword = cu.hashPassword(values.password, salt);
+        var encryptUsername = cu.encrypt(values.username, salt);
+        return Promise.all([hashEmail, salt, makePassword, encryptUsername])
+          .then(function(values) {
+            return user.update({
+              email:    values[0],
+              salt:     values[1],
+              password: values[2],
+              username: values[3]
+            })
+          })
+      })
+  },
+
   delete: function(email, password, username) {
-    verifyUser(email, password)
+    return verifyUser(email, password)
       .then(function(user) {
         if (user === null) throw new Error("incorrect credentials");
-        var encryptUsername = cu.encrypt(username, user.dataValues.salt);
-        // TODO: FINISH
+        return cu.encrypt(username, user.dataValues.salt)
+          .then(function(encryptUsername) {
+            if (encryptUsername !== user.dataValues.username) throw new Error("incorrect credentials");
+            return user.destroy()
+          })
       })
   },
 
