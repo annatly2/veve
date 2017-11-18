@@ -8,6 +8,18 @@ function getUser(email) {
   return User.findOne({where: {email: emailHash}})
 }
 
+function verifyUser(email, password) {
+  return getUser(email)
+    .then(function(user) {
+      if (user === null) throw new Error("email not registered");
+      return cu.hashPassword(password, user.dataValues.salt)
+        .then(function(passToCheck) {
+          if (passToCheck === user.dataValues.password) return user;
+          return null;
+        })
+    })
+}
+
 module.exports = {
   create: function(email, password, username) {
     var hashEmail = cu.hashSync(email);
@@ -26,16 +38,14 @@ module.exports = {
   },
 
   get: getUser,
+  verify: verifyUser,
 
-  verify: function(email, password) {
-    return getUser(email)
+  delete: function(email, password, username) {
+    verifyUser(email, password)
       .then(function(user) {
-        if (user === null) throw new Error("email not registered");
-        return cu.hashPassword(password, user.dataValues.salt)
-          .then(function(passToCheck) {
-            if (passToCheck === user.dataValues.password) return user.dataValues;
-            return null;
-          })
+        if (user === null) throw new Error("incorrect credentials");
+        var encryptUsername = cu.encrypt(username, user.dataValues.salt);
+        // TODO: FINISH
       })
   },
 
