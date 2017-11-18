@@ -9,7 +9,7 @@ var Garment = models.Garment;
 
 module.exports = function(app) {
   var router = express.Router();
-  var jwtauth = require("./jwtauth")(app);
+  var jwtauth = uu.jwtauth(app);
 
   function createToken(email) {
     var expires = moment().add(1, "days").valueOf();
