@@ -232,8 +232,18 @@ module.exports = function(app) {
       where: {
         id: garment.id
       }
-    }).then(function(dbGarment){
-      res.json(dbGarment);
+    })
+    .then(function(deleteCount) {
+      if (deleteCount === 1) {
+        res.json({
+          error: false
+        })
+      } else {
+        res.json({
+          error: true,
+          errorMsg: `expected to delete 1 row, deleted ${deleteCount}`
+        });
+      }
     });
   });
 
