@@ -25,6 +25,12 @@ module.exports = function(app) {
     }
   }
 
+  function accessDenied(req, res) {
+    res.statusCode = 401;
+    res.setHeader("WWW-Authenticate", 'Basic realm="veve"');
+    res.end("Access denied");
+  }
+
   router.post("/signup", function(req, res) {
     uu.get(req.body.email)
       .then(function(user) {
@@ -53,19 +59,14 @@ module.exports = function(app) {
     uu.verify(header.name, header.pass)
       .then(function(user) {
         if (user === null) {
-          res.statusCode = 401;
-          res.setHeader("WWW-Authenticate", 'Basic realm="veve"');
-          res.end("Access denied");
+          return accessDenied(req, res);
         } else {
           var token = createToken(header.name);
           res.json(token);
         }
       })
       .catch(function(err) {
-        return res.json({
-          error: true,
-          errorMsg: err.message
-        })
+        accessDenied(req, res);
       })
   });
 
@@ -73,32 +74,18 @@ module.exports = function(app) {
     jwtauth,
     function(req, res) {
       if (req.user === undefined) {
-        res.sendStatus(401);
-        return res.end();
-      }
-
-      var token = req.headers["x-access-token"];
-      var decoded;
-      try {
-        decoded = jwt.decode(token, app.get("jwtSecret"));
-      } catch(err) {
-        res.sendStatus(401);
-        return res.end();
-      }
-
-      if (decoded.secret === undefined) {
-        return res.json({
-          error: true,
-          errorMsg: "must provide a secret for JWT"
-        });
+        return accessDenied(req, res);
       }
 
       cu.decrypt(req.user.username, req.user.salt)
         .then(function(decryptedUsername) {
           var token = jwt.encode({
             username: decryptedUsername
-          }, decoded.secret);
-          res.json(token);
+          }, app.get("jwtSecret"));
+          res.json({
+            error: false,
+            token: token
+          });
         })
     }
   );
@@ -106,16 +93,13 @@ module.exports = function(app) {
   router.put("/account",
     jwtauth,
     function(req, res) {
-      console.log(req.user)
       if (req.user == null) {
-        res.sendStatus(401);
-        return res.end();
+        return accessDenied(req, res);
       }
 
       var header = auth(req);
       if (header == undefined) {
-        res.sendStatus(401);
-        return res.end();
+        return accessDenied(req, res);
       }
 
       if (req.body == undefined) {
@@ -151,14 +135,12 @@ module.exports = function(app) {
     jwtauth,
     function(req, res) {
       if (req.user === undefined) {
-        res.sendStatus(401);
-        return res.end();
+        return accessDenied(req, res);
       }
 
       var header = auth(req);
       if (header === undefined) {
-        res.sendStatus(401);
-        return res.end();
+        return accessDenied(req, res);
       }
 
       uu.delete(header.name, header.pass, req.body.username)
@@ -168,18 +150,18 @@ module.exports = function(app) {
           });
         })
         .catch(function(err) {
-          res.sendStatus(401);
-          return res.end();
+          return accessDenied(req, res);
         })
     }
   );
+
+  /* Clothes */
 
   router.get("/clothes/:closet",
     jwtauth,
     function(req, res) {
       if (req.user === undefined) {
-        res.sendStatus(401);
-        return res.end();
+        return accessDenied(req, res);
       }
 
       var query = {where: {userId: req.user.dataValues.id}};
