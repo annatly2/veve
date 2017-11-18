@@ -84,6 +84,16 @@ router.put("/clothes", function(req,res){
     });
 });
 
+router.delete("/clothes", function(req, res){
+  models.Garment.destroy({
+    where: {
+      name: req.body.name
+    }
+  }).then(function(dbGarment){
+    res.json(dbGarment);
+  });
+});
+
 module.exports = router;
 
 // Crypto
