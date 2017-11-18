@@ -5,6 +5,7 @@ var moment = require("moment");
 
 var models = require("../models");
 var uu = require("./user_utils");
+var cu = require("./crypto_utils");
 var User = models.User;
 var Garment = models.Garment;
 
@@ -67,6 +68,40 @@ module.exports = function(app) {
         })
       })
   });
+
+  router.get("/username",
+    jwtauth,
+    function(req, res) {
+      if (req.user === undefined) {
+        res.sendStatus(401);
+        return res.end();
+      }
+
+      var token = req.headers["x-access-token"];
+      var decoded;
+      try {
+        decoded = jwt.decode(token, app.get("jwtSecret"));
+      } catch(err) {
+        res.sendStatus(401);
+        return res.end();
+      }
+
+      if (decoded.secret === undefined) {
+        return res.json({
+          error: true,
+          errorMsg: "must provide a secret for JWT"
+        });
+      }
+
+      cu.decrypt(req.user.username, req.user.salt)
+        .then(function(decryptedUsername) {
+          var token = jwt.encode({
+            username: decryptedUsername
+          }, decoded.secret);
+          res.json(token);
+        })
+    }
+  );
 
   router.get("/clothes/:closet",
     jwtauth,
