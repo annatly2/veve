@@ -194,6 +194,7 @@ module.exports = function(app) {
     function(req, res) {
       var garment = req.body;
       garment.userId = req.user.id;
+      // TODO: encrypt garment.image
 
       Garment.create(garment)
       .then(function(dbGarment){
