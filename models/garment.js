@@ -20,12 +20,4 @@ var Garment = sequelize.define("garment", {
   },
 });
 
-Garment.associate = function(models){
-  Garment.belongsTo(models.User, {
-    foreignKey: {
-      allowNull: false
-    }
-  });
-};
-
 module.exports = Garment;

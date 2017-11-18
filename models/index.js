@@ -7,6 +7,16 @@ if (process.env.NODE_ENV === "development") {
   options = {force: true};
 }
 
+user.hasMany(garment, {
+  onDelete: "cascade"
+});
+
+garment.belongsTo(user, {
+  foreignKey: {
+    allowNull: false
+  }
+})
+
 user.sync(options)
   .then(garment.sync(options))
 
