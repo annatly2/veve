@@ -2,7 +2,10 @@ var express = require("express");
 var auth = require("basic-auth");
 var jwt = require("jwt-simple");
 var moment = require("moment");
+
+var models = require("../models");
 var uu = require("./user_utils")
+var Garment = models.Garment;
 
 module.exports = function(app) {
   var router = express.Router();
@@ -108,58 +111,3 @@ module.exports = function(app) {
 
   return router;
 }
-
-// Models
-
-var models = require("../models");
-// var User = models.User;
-var Garment = models.Garment;
-
-// function createUser(email, password, username) {
-//   return new Promise(function(resolve, reject) {
-//     var emailHash = hash(email);
-//     var salt = newSalt(email);
-//     var saltedPassword = hashPassword(password, salt);
-//     return encrypt(username, salt)
-//       .then(function(encryptedUsername) {
-//         return {
-//           email:    emailHash,
-//           salt:     salt,
-//           password: saltedPassword,
-//           username: encryptedUsername
-//         }
-//       })
-//       .then(function(user) {
-//         return User.create(user)
-//           .then(function(user) {
-//             resolve(user);
-//           })
-//       })
-//   })
-// }
-//
-// function getUser(email) {
-//   var emailHash = hash(email);
-//   return User.findOne({
-//     where: {
-//       email: emailHash
-//     }
-//   })
-//   .then(function(result) {
-//     if (result === null) {
-//       return null;
-//     }
-//     return result;
-//   })
-// }
-//
-// function verifyUser(email, password) {
-//   return getUser(email)
-//   .then(function(user) {
-//     if (user === null) {
-//       throw new Error("email not registered");
-//     }
-//     var toCheck = hashPassword(password, user.dataValues.salt);
-//     return toCheck === user.dataValues.password;
-//   })
-// }
