@@ -24,7 +24,6 @@ module.exports = {
         function(err, result) { resolve(result.toString("hex")); }
       );
     });
-    // return crypto.pbkdf2Sync(password, salt, 50000, 256, "sha512").toString("hex");
   },
 
   encrypt: function(plaintext, key) {
@@ -48,7 +47,7 @@ module.exports = {
 
   decrypt: function(ciphertext, key) {
     return new Promise(function(resolve, reject) {
-      let decipher = crypto.createDecifer("aes256", key);
+      let decipher = crypto.createDecipher("aes256", key);
       let decrypted = "";
 
       decipher.on("readable", function() {

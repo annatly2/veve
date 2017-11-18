@@ -39,6 +39,8 @@ module.exports = {
       })
   },
 
+  // express middleware for JSON Web Tokens
+  // https://www.sitepoint.com/using-json-web-tokens-node-js/
   jwtauth: function(app) {
     return function(req, res, next) {
       var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers["x-access-token"];
