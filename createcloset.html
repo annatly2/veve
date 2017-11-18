@@ -92,9 +92,9 @@
       </div>
 
    <!-- Clothing Success Modal -->
-   <div id="clothingSuccessModal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+   <div id="clothingSuccessModal" class="modal fade bd-example-modal-sm align-middle" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+            <div class="modal-content align-middle">
                 <div class="container text-secondary">
                     <h1 class="text-center">Clothing Added!</h1>
                 <div class="row text-center">
@@ -109,7 +109,7 @@
 
 
                     <!-- container div closer -->
-                </div>
+                </div> <!-- container closer -->
             </div>
         </div>
     <!-- Success Modal -->
@@ -166,23 +166,11 @@ $("#submitClothing").click(function() {
     $("#clothingSuccessModal").modal('show');
 });
 
-// const clothingModal = document.getElementById('clothingModal');
-// const clothingModalButton = document.getElementById('addClothingModal');
-// const clothingSuccessModal = document.getElementById('clothingSuccessModal');
-// const submitClothing = document.getElementById('submitClothing');
+$('#addMoreClothes').click(function() {
+    $('#clothingSuccessModal').modal('hide');
+    $('#clothingModal').modal('show');
+});
 
-// clothingModalButton.onclick = function(e){
-//     event.preventDefault();
-//     clothingModal.style.display="block";
-// };
-
-
-// submitClothing.onclick = function(e){
-//     event.preventDefault();
-//     clothingModal.style.display="none";
-//     console.log('worked');
-//     clothingSuccessModal.style.display ="block";
-// };
 
 
 
