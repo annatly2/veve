@@ -4,7 +4,8 @@ var jwt = require("jwt-simple");
 var moment = require("moment");
 
 var models = require("../models");
-var uu = require("./user_utils")
+var uu = require("./user_utils");
+var User = models.User;
 var Garment = models.Garment;
 
 module.exports = function(app) {
@@ -67,47 +68,69 @@ module.exports = function(app) {
       })
   });
 
-  // router.get("/test",
-  //   jwtauth,
-  //   function(req, res) {
-  //     if (req.user) {
-  //       res.send(req.user)
-  //     } else {
-  //       res.send("nope")
-  //     }
-  //   }
-  // );
+  router.get("/clothes/:closet",
+    jwtauth,
+    function(req, res) {
+      if (req.user === undefined) {
+        res.sendStatus(401);
+        return res.end();
+      }
 
-  router.get("/clothes", function(req,res){
-    var query = {};
-    if(req.query.email){
-      query.Email = req.query.email;
+      var query = {where: {userId: req.user.dataValues.id}};
+      if (req.params.closet !== "all") {
+        query.where.closet = req.params.closet;
+      }
+
+      Garment.findAll(query)
+        .then(function(garments) {
+          res.json({
+            error: false,
+            garments: garments
+          });
+        })
+        .catch(function(err) {
+          res.json({
+            error: true,
+            errorMsg: err.message
+          });
+        })
     }
-    models.Garment.findAll({
-      where: query,
-      include: [models.User]
-    }).then(function(dbGarment){
-      res.json(dbGarment);
-    });
-  });
+);
 
-  router.post("/clothes", function(req,res){
-    models.Garment.create(req.body).then(function(dbGarment){
-      res.json(dbGarment);
-    });
-  });
+  router.post("/clothes",
+    jwtauth,
+    function(req, res) {
+      var garment = req.body;
+      garment.userId = req.user.id;
 
-  router.put("/clothes", function(req,res){
-    models.Garment.update(
-      req.body,
-      {
-        where: {
-          name: req.body.name
-        }
-      }).then(function(dbGarment){
+      Garment.create(garment)
+      .then(function(dbGarment){
         res.json(dbGarment);
       });
-  });
+    }
+  );
+
+  router.put("/clothes",
+    jwtauth,
+    function(req, res) {
+      var garment = req.body;
+
+      Garment.update(garment, {where: {id: garment.id}})
+        .then(function(updateCount) {
+          updateCount = updateCount[0];
+          if (updateCount === 1) {
+            res.json({
+              error: false
+            });
+          } else {
+            res.json({
+              error: true,
+              errorMsg: `expected to update 1 row, updated ${updateCount}`
+            });
+          }
+        });
+    }
+  );
 
   return router;
 }
