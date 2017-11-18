@@ -220,5 +220,15 @@ module.exports = function(app) {
     }
   );
 
+  router.delete("/clothes", function(req, res){
+    models.Garment.destroy({
+      where: {
+        name: req.body.name
+      }
+    }).then(function(dbGarment){
+      res.json(dbGarment);
+    });
+  });
+
   return router;
 }
