@@ -65,18 +65,18 @@ module.exports = function(app) {
           errorMsg: err.message
         })
       })
-  })
+  });
 
-  router.get("/test",
-    jwtauth,
-    function(req, res) {
-      if (req.user) {
-        res.send(req.user)
-      } else {
-        res.send("nope")
-      }
-    }
-  )
+  // router.get("/test",
+  //   jwtauth,
+  //   function(req, res) {
+  //     if (req.user) {
+  //       res.send(req.user)
+  //     } else {
+  //       res.send("nope")
+  //     }
+  //   }
+  // );
 
   router.get("/clothes", function(req,res){
     var query = {};
