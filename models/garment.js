@@ -9,23 +9,12 @@ var Garment = sequelize.define("garment", {
   category:{
     type: Sequelize.STRING
   },
-  color:{
-    type: Sequelize.STRING
-  },
   image:{
-    type: Sequelize.STRING
+    type: Sequelize.TEXT
   },
   closet:{
     type: Sequelize.STRING
   },
 });
-
-Garment.associate = function(models){
-  Garment.belongsTo(models.User, {
-    foreignKey: {
-      allowNull: false
-    }
-  });
-};
 
 module.exports = Garment;
