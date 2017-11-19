@@ -70,6 +70,22 @@ $(document).ready(function() {
   var login = $("#loginButton");
   var signUp = $("#signUpButton");
 
+  var access_token = localStorage.getItem("access_token");
+  if (access_token != undefined) {
+    $.ajax({
+      method: "GET",
+      url: "/api/username",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader("x-access-token", access_token);
+      }
+    })
+    .done(function(response) {
+      if (response.error !== undefined && response.error === false) {
+        window.location = loginSuccessURL;
+      }
+    })
+  }
+
   signUp.click(function(e) {
     e.preventDefault();
     window.location="signUp.html";
