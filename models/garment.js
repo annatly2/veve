@@ -9,9 +9,6 @@ var Garment = sequelize.define("garment", {
   category:{
     type: Sequelize.STRING
   },
-  color:{
-    type: Sequelize.STRING
-  },
   image:{
     type: Sequelize.TEXT
   },
