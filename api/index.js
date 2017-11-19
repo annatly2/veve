@@ -79,12 +79,9 @@ module.exports = function(app) {
 
       cu.decrypt(req.user.username, req.user.salt)
         .then(function(decryptedUsername) {
-          var token = jwt.encode({
-            username: decryptedUsername
-          }, app.get("jwtSecret"));
           res.json({
             error: false,
-            token: token
+            username: decryptedUsername
           });
         })
     }
