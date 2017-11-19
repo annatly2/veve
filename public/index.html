@@ -33,7 +33,7 @@
      </div>
      <div class="form-group row text-center">
         <div class="col">
-           <button id="loginButton" type="button" class="btn btn-info">Login</button>
+           <button id="loginButton" type="submit" class="btn btn-info">Login</button>
            <button id="signUpButton" type="button" class="btn btn-info">Sign Up</button>
         </div>
      </div>
@@ -61,43 +61,49 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
 <script>
-   var signUp = $("#signUpButton");
-   signUp.click(function(e) {
-     e.preventDefault();
-     window.location="signUp.html";
-   });
+var loginSuccessURL = "/closets";
 
-  var emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+$(document).ready(function() {
   var form = $("#loginForm");
   var emailField = $("input[name=email]");
   var passwordField = $("input[name=password]");
   var login = $("#loginButton");
+  var signUp = $("#signUpButton");
+
+  signUp.click(function(e) {
+    e.preventDefault();
+    window.location="signUp.html";
+  });
+
   login.click(function(e) {
     e.preventDefault();
     var email = emailField.val().trim();
     var password = passwordField.val().trim();
-    if (!email.match(emailRegex)) {
-      $("#modal-title").text("Invalid Email");
-      $("#modal-message").text("Please enter a valid email address.");
-      $(".modal").modal();
-      return;
-    } else {
+    if (email.length > 0 && password.length > 0) {
+      var credentials = btoa(email + ":" + password); // base64 encode credentials
       $.ajax({
         method: "GET",
         url: "/api/token",
         beforeSend: function(xhr) {
           xhr.setRequestHeader(
             "Authorization",
-            `Basic ${btoa(email + ":" + password)}`
+            `Basic ${credentials}`
           );
         }
       })
       .done(function(response) {
-        localStorage.setItem("x-access-token", response.token);
-        window.location = "/closets";
+        localStorage.setItem("access_token", response.token);
+        window.location = loginSuccessURL;
+      })
+      .fail(function(err) {
+        if (err.status === 403) {
+          emailField.addClass("is-invalid");
+          passwordField.addClass("is-invalid");
+        }
       });
     }
   });
+});
 </script>
 
 </body>
