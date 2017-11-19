@@ -2,7 +2,7 @@ var user = require("./user");
 var garment = require("./garment");
 
 var options = {};
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_DB_ENV === "development") {
   console.log("OVERWRITING ENTIRE DATABASE");
   options = {force: true};
 }
