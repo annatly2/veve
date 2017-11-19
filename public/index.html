@@ -18,44 +18,86 @@
 </div>
 
 <div class="container">
-<form>
-   <div class="form-group row">
-      <label class="col-sm-2 col-form-label" for="email">Email</label>
-         <div class="col-sm-10">
-               <input name="email" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
-         </div>
-   </div>
-   <div class="form-group row">
-      <label class="col-sm-2 col-form-label" for="password">Password</label>
-      <div class="col-sm-10">
-            <input name="password" type="password" class="form-control" placeholder="Password">
-         </div>
-   </div>
-   <div class="form-group row text-center">
-      <div class="col">
-         <button id="loginButton" type="submit" class="btn btn-info">Login</button>
-         <button id="signUpButton" type="submit" class="btn btn-info">Sign Up</button>
+  <form id="loginForm">
+     <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="email">Email</label>
+           <div class="col-sm-10">
+                 <input name="email" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
+           </div>
+     </div>
+     <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="password">Password</label>
+        <div class="col-sm-10">
+              <input name="password" type="password" class="form-control" placeholder="Password">
+           </div>
+     </div>
+     <div class="form-group row text-center">
+        <div class="col">
+           <button id="loginButton" type="button" class="btn btn-info">Login</button>
+           <button id="signUpButton" type="button" class="btn btn-info">Sign Up</button>
+        </div>
+     </div>
+  </form>
+</div>
+
+<div class="modal" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title"></h5>
       </div>
-   </div>
-</form>
+      <div class="modal-body">
+        <p id="modal-message"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
 
-
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
 <script>
-   const signUp = document.getElementById('signUpButton');
+   var signUp = $("#signUpButton");
+   signUp.click(function(e) {
+     e.preventDefault();
+     window.location="signUp.html";
+   });
 
-   signUp.onclick = function(e) {
-      event.preventDefault();
-      window.location="signUp.html";
-   };
-
-
+  var emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  var form = $("#loginForm");
+  var emailField = $("input[name=email]");
+  var passwordField = $("input[name=password]");
+  var login = $("#loginButton");
+  login.click(function(e) {
+    e.preventDefault();
+    var email = emailField.val().trim();
+    var password = passwordField.val().trim();
+    if (!email.match(emailRegex)) {
+      $("#modal-title").text("Invalid Email");
+      $("#modal-message").text("Please enter a valid email address.");
+      $(".modal").modal();
+      return;
+    } else {
+      $.ajax({
+        method: "GET",
+        url: "/api/token",
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader(
+            "Authorization",
+            `Basic ${btoa(email + ":" + password)}`
+          );
+        }
+      })
+      .done(function(response) {
+        localStorage.setItem("x-access-token", response.token);
+        window.location = "/closets";
+      });
+    }
+  });
 </script>
 
 </body>
