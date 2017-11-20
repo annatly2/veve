@@ -31,6 +31,11 @@ module.exports = function(app) {
     res.end("Access denied");
   }
 
+  function forbidden(req, res) {
+    res.statusCode = 403;
+    res.end("Forbidden");
+  }
+
   router.post("/signup", function(req, res) {
     uu.get(req.body.email)
       .then(function(user) {
@@ -59,14 +64,14 @@ module.exports = function(app) {
     uu.verify(header.name, header.pass)
       .then(function(user) {
         if (user === null) {
-          return accessDenied(req, res);
+          return forbidden(req, res);
         } else {
           var token = createToken(header.name);
           res.json(token);
         }
       })
       .catch(function(err) {
-        accessDenied(req, res);
+        forbidden(req, res);
       })
   });
 
@@ -74,17 +79,14 @@ module.exports = function(app) {
     jwtauth,
     function(req, res) {
       if (req.user === undefined) {
-        return accessDenied(req, res);
+        return forbidden(req, res);
       }
 
       cu.decrypt(req.user.username, req.user.salt)
         .then(function(decryptedUsername) {
-          var token = jwt.encode({
-            username: decryptedUsername
-          }, app.get("jwtSecret"));
           res.json({
             error: false,
-            token: token
+            username: decryptedUsername
           });
         })
     }
@@ -94,12 +96,12 @@ module.exports = function(app) {
     jwtauth,
     function(req, res) {
       if (req.user == null) {
-        return accessDenied(req, res);
+        return forbidden(req, res);
       }
 
       var header = auth(req);
       if (header == undefined) {
-        return accessDenied(req, res);
+        return forbidden(req, res);
       }
 
       if (req.body == undefined) {
@@ -135,16 +137,16 @@ module.exports = function(app) {
     jwtauth,
     function(req, res) {
       if (req.user === undefined) {
-        return accessDenied(req, res);
+        return forbidden(req, res);
       }
 
       var header = auth(req);
       if (header === undefined) {
-        return accessDenied(req, res);
+        return forbidden(req, res);
       }
 
       if (req.body.username == undefined) {
-        return accessDenied(req,res);
+        return forbidden(req,res);
       }
 
       uu.delete(header.name, header.pass, req.body.username)
@@ -154,7 +156,7 @@ module.exports = function(app) {
           });
         })
         .catch(function(err) {
-          return accessDenied(req, res);
+          return forbidden(req, res);
         })
     }
   );
@@ -165,7 +167,7 @@ module.exports = function(app) {
     jwtauth,
     function(req, res) {
       if (req.user === undefined) {
-        return accessDenied(req, res);
+        return forbidden(req, res);
       }
 
       var query = {where: {userId: req.user.dataValues.id}};
