@@ -1,6 +1,5 @@
 var express = require("express");
 var auth = require("basic-auth");
-var jwt = require("jwt-simple");
 var moment = require("moment");
 
 var models = require("../models");
@@ -10,20 +9,10 @@ var User = models.User;
 var Garment = models.Garment;
 
 module.exports = function(app) {
-  var router = express.Router();
-  var jwtauth = uu.jwtauth(app);
+  var tu = require("./token_utils")(app);
+  var jwtauth = tu.middleware;
 
-  function createToken(email) {
-    var expires = moment().add(1, "days").valueOf();
-    var token = jwt.encode({
-      iss: email,
-      exp: expires
-    }, app.get("jwtSecret"));
-    return {
-      token: token,
-      expires: expires
-    }
-  }
+  var router = express.Router();
 
   function accessDenied(req, res) {
     res.statusCode = 401;
@@ -45,7 +34,7 @@ module.exports = function(app) {
         return uu.create(req.body.email, req.body.password, req.body.username);
       })
       .then(function(newUser) {
-        var token = createToken(req.body.email);
+        var token = tu.create(req.body.email);
         res.json({
           error: false,
           session: token
@@ -66,7 +55,7 @@ module.exports = function(app) {
         if (user === null) {
           return forbidden(req, res);
         } else {
-          var token = createToken(header.name);
+          var token = tu.create(header.name);
           res.json(token);
         }
       })

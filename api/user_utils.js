@@ -1,4 +1,3 @@
-var jwt = require("jwt-simple");
 var cu = require("./crypto_utils");
 var models = require("../models");
 var User = models.User;
@@ -70,35 +69,5 @@ module.exports = {
             return user.destroy()
           })
       })
-  },
-
-  // express middleware for JSON Web Tokens
-  // https://www.sitepoint.com/using-json-web-tokens-node-js/
-  jwtauth: function(app) {
-    return function(req, res, next) {
-      var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers["x-access-token"];
-      if (token) {
-        try {
-          var decoded = jwt.decode(token, app.get("jwtSecret"));
-          if (decoded.exp <= Date.now()) {
-            return res.end("Access token has expired", 400);
-          }
-          getUser(decoded.iss)
-            .then(function(user) {
-              req.user = user;
-              next();
-            })
-            .catch(function(err) {
-              console.error(err);
-              next();
-            })
-        } catch(err) {
-          console.error(err);
-          return next();
-        }
-      } else {
-        return next();
-      }
-    }
   },
 }
