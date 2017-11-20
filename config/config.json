@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "veve",
+    "password": "veve",
+    "database": "veve",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "veve",
+    "password": "veve",
+    "database": "veve",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "veve",
+    "password": "veve",
+    "database": "veve",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

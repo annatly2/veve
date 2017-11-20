@@ -1,20 +1,26 @@
-var connection = require("./connection");
-var Sequelize = connection.Sequelize;
-var sequelize = connection.sequelize;
+module.exports = function(sequelize, DataTypes) {
+  var Garment = sequelize.define("Garment", {
+    name: {
+      type: DataTypes.STRING
+    },
+    category: {
+      type: DataTypes.STRING
+    },
+    image: {
+      type: DataTypes.TEXT
+    },
+    closet: {
+      type: DataTypes.STRING
+    },
+  });
 
-var Garment = sequelize.define("garment", {
-  name:{
-    type: Sequelize.STRING
-  },
-  category:{
-    type: Sequelize.STRING
-  },
-  image:{
-    type: Sequelize.TEXT
-  },
-  closet:{
-    type: Sequelize.STRING
-  },
-});
+  Garment.associate = function(models) {
+    Garment.belongsTo(models.User, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
+  };
 
-module.exports = Garment;
+  return Garment;
+}

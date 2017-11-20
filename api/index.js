@@ -2,9 +2,9 @@ var express = require("express");
 var auth = require("basic-auth");
 var moment = require("moment");
 
-var models = require("../models");
 var uu = require("./user_utils");
 var cu = require("./crypto_utils");
+var models = require("../models");
 var User = models.User;
 var Garment = models.Garment;
 
@@ -159,13 +159,14 @@ module.exports = function(app) {
         return forbidden(req, res);
       }
 
-      var query = {where: {userId: req.user.dataValues.id}};
+      var query = {where: {UserId: req.user.dataValues.id}};
       if (req.params.closet !== "all") {
         query.where.closet = req.params.closet;
       }
 
       Garment.findAll(query)
         .then(function(garments) {
+          // TODO: decrypt garment images AND/OR make separate API call
           res.json({
             error: false,
             garments: garments
@@ -183,8 +184,12 @@ module.exports = function(app) {
   router.post("/clothes",
     jwtauth,
     function(req, res) {
+      if (req.user === undefined) {
+        return forbidden(req, res);
+      }
+
       var garment = req.body;
-      garment.userId = req.user.id;
+      garment.UserId = req.user.id;
       // TODO: encrypt garment.image
 
       Garment.create(garment)
@@ -197,9 +202,18 @@ module.exports = function(app) {
   router.put("/clothes",
     jwtauth,
     function(req, res) {
+      if (req.user === undefined) {
+        return forbidden(req, res);
+      }
+
       var garment = req.body;
 
-      Garment.update(garment, {where: {id: garment.id}})
+      Garment.update(garment, {
+          where: {
+            UserId: req.user.id,
+            id: garment.id
+          }
+        })
         .then(function(updateCount) {
           updateCount = updateCount[0];
           if (updateCount === 1) {
@@ -216,27 +230,35 @@ module.exports = function(app) {
     }
   );
 
-  router.delete("/clothes", jwtauth, function(req, res){
-    var garment = req.body;
+  router.delete("/clothes",
+    jwtauth,
+    function(req, res) {
+      if (req.user === undefined) {
+        return forbidden(req, res);
+      }
 
-    Garment.destroy({
-      where: {
-        id: garment.id
-      }
-    })
-    .then(function(deleteCount) {
-      if (deleteCount === 1) {
-        res.json({
-          error: false
-        })
-      } else {
-        res.json({
-          error: true,
-          errorMsg: `expected to delete 1 row, deleted ${deleteCount}`
-        });
-      }
-    });
-  });
+      var garment = req.body;
+
+      Garment.destroy({
+        where: {
+          UserId: req.user.id,
+          id: garment.id
+        }
+      })
+      .then(function(deleteCount) {
+        if (deleteCount === 1) {
+          res.json({
+            error: false
+          })
+        } else {
+          res.json({
+            error: true,
+            errorMsg: `expected to delete 1 row, deleted ${deleteCount}`
+          });
+        }
+      });
+    }
+  );
 
   return router;
 }
