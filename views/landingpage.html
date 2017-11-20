@@ -13,7 +13,7 @@
 <div class="jumbotron jumbotron-fluid bg-info text-white">
    <div class="container text-center">
       <h1 class="display-3">Wardrobe App</h1>
-      <p class="lead">Login/Sign UP</p>
+      <p class="lead">Login/Sign Up</p>
    </div>
 </div>
 
@@ -54,6 +54,12 @@
       window.location="signup.html";
    };
    
+   const logIn = document.getElementById('loginButton');
+   logIn.onclick = function(e) {
+      event.preventDefault();
+      window.location="closets.html";
+   };
+
 </script>
 
 </body>
