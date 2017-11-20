@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+   integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+   <title>Create Closet Start</title>
+</head>
+<body>
+
+<div class="jumbotron jumbotron-fluid bg-info text-white">
+    <div class="container text-center">
+        <h1 class="display-3">Upload</h1>
+    </div>
+    <div>
+        <ul class="nav nav-tabs justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link text-white" href="../views/profile.html">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="../views/closets.html">Closets</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="../views/outfits.html">Outfits</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white active bg-info" href="../views/upload.html">Upload</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <button type="button" class="btn btn-info mt-4" data-toggle="modal" data-target="#createClosetModal">Create New Closet</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            <!--This will activate the Add Clothing Modal -->
+            <button id="addClothingModal" type="button" class="btn btn-info mt-4" data-toggle="modal" data-target="#clothingModal">Add Clothes</button>
+        </div>
+    </div>
+
+<!-- Add Clothing Modal -->
+<div class="modal fade bd-modal-lg" id="clothingModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="container">
+                <form id="clothingForm">
+                    <div class="form-group row">
+                        <div class="input-group m-2">
+                            <input type="text" class="form-control" placeholder="Title" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="input-group m-2">
+                            <input type="text" class="form-control" placeholder="Description" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="input-group m-2">
+                            <input type="text" class="form-control" placeholder="Closet" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="input-group m-2">
+                            <input type="text" class="form-control" placeholder="Date Purchased" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group row m-2">
+                        <div class="col-12 text-center">
+                            <!-- This button will activate the add clothing modal WITHOUT JavaScript -->
+                            <!-- <button type="button btn-info" class="btn btn-info mt-4" data-toggle="modal" data-target="#successModal">Add Clothing</button> -->
+                            
+                            <!-- This button will activate the add clothing modal WITH JavaScript -->
+                            <button type="button" class="btn btn-info mt-4" id="submitClothing">Add Clothing</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+          </div>
+        </div>
+
+        <!--Clothing Modal closer -->
+      </div>
+
+   <!-- Clothing Success Modal -->
+   <div id="clothingSuccessModal" class="modal fade bd-example-modal-sm align-middle" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content align-middle">
+                <div class="container text-secondary">
+                    <h1 class="text-center">Clothing Added!</h1>
+                <div class="row text-center">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-info mt-4" id="addMoreClothes">Add More Clothes</button>
+                        <a href="../views/closets.html" class="btn btn-info mt-4" id="goToClosets">Go To Your Closets</a>
+
+                    </div>
+                </div>
+                    <!-- container div closer -->
+                </div> <!-- container closer -->
+            </div>
+        </div>
+    <!-- Success Modal -->
+    </div>
+
+<!-- Create Closet Modal -->
+<div class="modal fade bd-modal-lg" id="createClosetModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="container">
+                <form id="clothingForm">
+                    <div class="form-group row">
+                        <div class="input-group m-2">
+                            <input type="text" class="form-control" placeholder="Title" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="input-group m-2">
+                            <input type="text" class="form-control" placeholder="Description" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group row m-2">
+                        <div class="col-12 text-center">
+                            <!-- This button will activate the add clothing modal WITHOUT JavaScript -->
+                            <!-- <button type="button btn-info" class="btn btn-info mt-4" data-toggle="modal" data-target="#successModal">Add Clothing</button> -->
+                            
+                            <!-- This button will activate the add closet modal WITH JavaScript -->
+                            <button type="button" class="btn btn-info mt-4" id="submitCloset">Add Closet</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+          </div>
+        </div>
+
+        <!--Closet Modal closer -->
+      </div>
+
+
+<!-- /container -->
+</div> <!-- /container -->
+    
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+
+<script>
+$("#submitClothing").click(function() {
+    $("#clothingModal").modal('hide');
+    $("#clothingSuccessModal").modal('show');
+});
+$('#addMoreClothes').click(function() {
+    $('#clothingSuccessModal').modal('hide');
+    $('#clothingModal').modal('show');
+});
+</script>
+</body>
+</html>

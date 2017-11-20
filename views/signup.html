@@ -1,49 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap 4.0.0-beta.2 CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
-    integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-
-   <!-- <link rel="stylesheet" type="text/css" href="../public/assets/css/style.css"> -->
-   <title>VeVe</title>
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
+   integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+   <title>Sign Up</title>
 </head>
 <body>
     <div class="jumbotron jumbotron-fluid bg-info text-white">
-        <div class="container text-center">
-            <h1 class="display-3">Closets</h1>
+    <div class="container text-center">
+        <h1 class="display-3">Sign Up!</h1>
+        <p class="lead">Enter your information below</p>
+    </div>
+    </div>
+
+<div class="container">
+    <form>
+    <!-- Username, email, and password inputs -->
+    <div class="form-group row"> 
+        <label for="email" class="col-sm-2 col-form-label">Username</label>
+        <div class="col">
+            <input type="text" class="form-control" id="inputDisplayName" placeholder="Username">
         </div>
-        <div>
-            <ul class="nav nav-tabs justify-content-center">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="../views/index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="../views/closets.html">Closets</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="../views/profile.html">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active text-white bg-info" href="../views/upload.html">Upload</a>
-                </li>
-            </ul>
+    </div>
+    <div class="form-group row">
+        <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+        <div class="col">
+            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+        <div class="col">
+            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
         </div>
     </div>
 
-    <div class="container">
-         <h1>Home page  <span class="username"></span>!</h1>
-    
+    <h3 class="text-center">Brand Preferences</h3>
+
+        <!-- checkboxes for brand preferences -->
+    <div class="row justify-content-center">
+    <div class="form-check form-check-inline">
+    <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">Amazon
+    </label>
+    </div>
+    <div class="form-check form-check-inline">
+    <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"> Forever21
+    </label>
+    </div>    
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"> Old Navy
+        </label>
+    </div>
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"> Target
+        </label>
+    </div>    
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"> Lululemon
+        </label>
+    </div>                    
+    </div> <!-- /row -->
+            
+    <div class="row justify-content-center">
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"> Aeropostale
+        </label>
+    </div>
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"> Levis
+        </label>
+    </div>   
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"> Nordstrom
+        </label>
+    </div>
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"> Nike
+        </label>
+    </div>    
+    <div class="form-check form-check-inline">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"> Top Shop
+        </label>
+    </div>
+    </div> <!-- /row -->
+
+    <!-- Measurements Inputs -->
+    <h3 class="text-center">Measurements</h3>
+    <div class="container text-center">
+    <div class="form-group row justify-content-center"> 
+        <label for="height" class="col-xs-2 col-form-label">Height</label>
+        <div class="col-sm-2">
+            <input name="height" type="text" class="form-control" id="inputDisplayName" placeholder="in.">
+        </div>
+        <label for="weight" class="col-xs-2 col-form-label">Weight</label>
+        <div class="col-sm-2">
+            <input name="weight" type="text" class="form-control" id="inputDisplayName" placeholder="lbs.">
+        </div>
     </div>
 
+    <div class="form-group row justify-content-center"> 
+        <label for="chest" class="col-xs-2 col-form-label">Chest</label>
+        <div class="col-sm-2">
+            <input name="chest" type="text" class="form-control" id="inputDisplayName" placeholder="in.">
+        </div>
+        <label for="hips" class="col-xs-2 col-form-label">Hips</label>
+        <div class="col-sm-2">
+            <input name="hips" type="text" class="form-control" id="inputDisplayName" placeholder="in.">
+        </div>
+    </div>
+    </div> <!-- container closer -->
+        
+    <!-- Submit button to create account -->
+    <div class="form-group row text-center">
+        <div class="col">
+        <button type="submit" class="btn btn-primary bg-info">Create Account</button>
+        </div>
+    </div>
+    </form>
+<!-- Container Div closer -->
+</div>
 
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
- </body>
- </html>
+
+</body>
+</html>
