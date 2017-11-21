@@ -55,3 +55,12 @@ function getAccessToken(email, password, success, failure) {
   })
   .fail(failure);
 }
+
+function capitalize(word) {
+  return word[0].toUpperCase() + word.slice(1);
+}
+
+function signOut() {
+  window.localStorage.removeItem("access_token");
+  window.location = "/";
+}
