@@ -188,7 +188,16 @@ module.exports = function(app) {
 
       Garment.create(garment)
       .then(function(dbGarment){
-        res.json(dbGarment);
+        res.json({
+          error: false,
+          garment: dbGarment
+        });
+      })
+      .catch(function(err) {
+        res.json({
+          error: true,
+          errorMsg: err.message
+        });
       });
     }
   );
@@ -217,7 +226,13 @@ module.exports = function(app) {
               errorMsg: `expected to update 1 row, updated ${updateCount}`
             });
           }
-        });
+        })
+        .catch(function(err) {
+          res.json({
+            error: true,
+            errorMsg: err.message
+          });
+        })
     }
   );
 
@@ -244,7 +259,15 @@ module.exports = function(app) {
             errorMsg: `expected to delete 1 row, deleted ${deleteCount}`
           });
         }
-      });
+      })
+      .catch(function(err) {
+        res.json({
+          error: true,
+          errorMsg: err.message
+        });
+      })
+    }
+  );
     }
   );
 
