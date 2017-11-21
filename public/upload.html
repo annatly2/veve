@@ -166,13 +166,55 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-
+<script src="/assets/js/utils.js"></script>
 
 <script>
+var token = getLocalAccessToken();
+// $.ajax({
+//     method: "GET",
+//     url: "/api/username",
+//     beforeSend: setAccessTokenHeader(token)
+//   })
+//   .done(function(response) {
+//     console.log(response);
+//   });
+//   .fail(function(err) {
+//     window.localStorage.removeItem("access_token");
+//     failure(err);
+//   });
+
+
+
+
 
 $("#submitClothing").click(function() {
     $("#clothingModal").modal('hide');
     $("#clothingSuccessModal").modal('show');
+    
+
+    checkAccessToken(success, failure);
+
+    function failure() {
+        console.log("not working");
+    }
+    function success() {
+    var queryURL = "api/clothes";
+    var newClothes = {
+            name: "test",
+            category: "test1",
+            color: "test2",
+            closet: "formal"
+        }
+    $.ajax({
+        data: newClothes,
+        method: "POST",
+        url: queryURL,
+        beforeSend: setAccessTokenHeader(token)
+    }).done(function(response){
+       console.log(response);
+    });
+}
+
 });
 
 $('#addMoreClothes').click(function() {
