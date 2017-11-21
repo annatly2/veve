@@ -6,7 +6,7 @@
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
    integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-   <title>Create Closet Start</title>
+   <title>Upload</title>
 </head>
 <style>
 
@@ -31,13 +31,13 @@
                     <a class="nav-link text-white" href="profile.html">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white active bg-info" href="closets.html">Closets</a>
+                    <a class="nav-link text-white" href="closets.html">Closets</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="outfits.html">Outfits</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="upload.html">Upload</a>
+                    <a class="nav-link text-white active bg-info" href="upload.html">Upload</a>
                 </li>
             </ul>
         </div>
@@ -73,8 +73,35 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="input-group m-2">
-                            <input type="text" class="form-control" placeholder="Closet" aria-describedby="basic-addon1">
+                            <div class="dropdown input-group m-2">
+                                <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Category" aria-describedby="basic-addon1">
+                                <span class="caret"></span>
+                                <ul class="dropdown-menu">
+                                  <li><a href="#" class="text-info">Headwear</a></li>
+                                  <li><a href="#" class="text-info">Top</a></li>
+                                  <li><a href="#" class="text-info">Outerwear</a></li>
+                                  <li><a href="#" class="text-info">Bottoms</a></li>
+                                  <li><a href="#" class="text-info">Shoes</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    <div class="form-group row">
+                            <div class="dropdown input-group m-2">
+                                <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Closet" aria-describedby="basic-addon1">
+                                <span class="caret"></span>
+                                <ul class="dropdown-menu">
+                                  <li><a href="#" class="text-info">Active</a></li>
+                                  <li><a href="#" class="text-info">Casual</a></li>
+                                  <li><a href="#" class="text-info">Formal</a></li>
+                                  <li><a href="#" class="text-info">Work</a></li>
+                                  <li><a href="#" class="text-info">Other</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    <div class = "form-group row m-2">
+                        <div class = "input-group">
+                            <input class = "form-control" id = "selectFile" type = "file" accept="image/*">
                         </div>
                     </div>
                     <div class="form-group row m-2">
@@ -104,7 +131,7 @@
                     <h2 class="text-center">Clothing Added!</h2>
                 <div class="row text-center">
                     <div class="col-12 mb-0">
-                        <button type="button" class="btn btn-info mt-4" id="goToClosets">Go To Closets</button>
+                        <a href = "../public/closets.html" class="btn btn-info mt-4" id="goToClosets">Go To Closets</a>
                     </div>
                 </div>
                 <div class="row text-center">
@@ -146,7 +173,7 @@
                             <!-- <button type="button btn-info" class="btn btn-info mt-4" data-toggle="modal" data-target="#successModal">Add Clothing</button> -->
                             
                             <!-- This button will activate the add closet modal WITH JavaScript -->
-                            <button type="button" class="btn btn-info mt-4" id="submitCloset">Add Closet</button>
+                            <button type="button" class="btn btn-info mt-4" id="submitOutfit">Add Outfit</button>
                         </div>
                     </div>
                 </form>
@@ -185,37 +212,32 @@ var token = getLocalAccessToken();
 
 
 
-
-
 $("#submitClothing").click(function() {
     $("#clothingModal").modal('hide');
-    $("#clothingSuccessModal").modal('show');
-    
-
-    checkAccessToken(success, failure);
-
-    function failure() {
-        console.log("not working");
-    }
-    function success() {
-    var queryURL = "api/clothes";
     var newClothes = {
-            name: "test",
-            category: "test1",
-            color: "test2",
-            closet: "formal"
-        }
+        name: "test",
+        category: "test1",
+        color: "test2",
+        closet: "formal"
+    }
+
     $.ajax({
         data: newClothes,
         method: "POST",
-        url: queryURL,
+        url: "/api/clothes",
         beforeSend: setAccessTokenHeader(token)
-    }).done(function(response){
-       console.log(response);
-    });
-}
-
-});
+    })
+    .done(function(response) {
+        console.log(response);
+        
+        setTimeout(function() {
+            $("#clothingSuccessModal").modal('show');
+        }, 100)
+    })
+    .fail(function() {
+        alert("oops")
+    })
+})
 
 $('#addMoreClothes').click(function() {
     $('#clothingSuccessModal').modal('hide');
@@ -227,6 +249,7 @@ $('#goToClosets').click(function(){
 });
 
 
+var fileInput = $("#selectFile");
 
 
 </script>
