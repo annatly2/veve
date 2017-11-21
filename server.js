@@ -16,6 +16,7 @@ app.use("/api", require("./api")(app));
 
 var db_options = {};
 if (process.env.NODE_DB_ENV === "overwrite") {
+  console.log("OVERWRITING DATABASE ON RELOAD");
   db_options.force = true;
 }
 
