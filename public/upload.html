@@ -227,16 +227,30 @@ $("#submitClothing").click(function() {
         newClothes.closet = "Other";
     }
 
+    var invalidFlag = false;
+
+
     for (var key in newClothes) {
         var prop = newClothes[key];
         if(prop.length < 1){
             $("#item-" + key).addClass("is-invalid");
+            invalidFlag = true;
         }
     }
 
-    console.log(newClothes)
-    return
+    if (invalidFlag){
+        return;
+    }
 
+    if (fileInput.length > 0){
+        var file = fileInput[0];
+        var reader = new FileReader();
+        reader.onloadend = function(e){
+            var data = e.target.result;
+            resizeImage(data);
+        };
+        reader.readAsDataURL(file);
+    };
 
 
     $.ajax({
