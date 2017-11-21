@@ -64,21 +64,21 @@
                 <form id="clothingForm">
                     <div class="form-group row">
                         <div class="input-group m-2">
-                            <input type="text" id = "clothingTitle" class="form-control" placeholder="Title" aria-describedby="basic-addon1">
+                            <input type="text" id = "item-name" class="form-control" placeholder="Title" aria-describedby="basic-addon1">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="input-group m-2">
-                            <input type="text" id = "clothingDescription" class="form-control" placeholder="Description" aria-describedby="basic-addon1">
+                            <input type="text" id = "item-description" class="form-control" placeholder="Description" aria-describedby="basic-addon1">
                         </div>
                     </div>
 
                     <div class="form-group row">
                             <div class="input-group m-2">
-                                <select id = "clothingCategory" class="form-control">
-                                    <label>Select a clothing category</label>
+                                <select id = "item-category" class="form-control">
+                                    <option>Select a Clothing Category&hellip;</option>
                                     <option>Headwear</option>
-                                    <option>Top</option>
+                                    <option>Tops</option>
                                     <option>Outerwear</option>
                                     <option>Bottoms</option>
                                     <option>Shoes</option>
@@ -88,7 +88,8 @@
 
                     <div class="form-group row">
                             <div class="input-group m-2">
-                                <select id = "closetType" class="form-control">
+                                <select id = "item-closet" class="form-control">
+                                    <option>Select a Closet Type&hellip;</option>
                                     <option>Active</option>
                                     <option>Casual</option>
                                     <option>Formal</option>
@@ -198,23 +199,45 @@
 
 var token = getLocalAccessToken();
 var fileInput = $("#selectFile");
-var clothingTitle = $("#clothingTitle");
-var clothingDescription = $("#clothingDescription");
-var clothingCategory = $("#clothingCategory");
-var closetType = $("#closetType");
+var clothingTitle = $("#item-name");
+var clothingDescription = $("#item-description");
+var clothingCategory = $("#item-category");
+var closetType = $("#item-closet");
 
 
 $("#submitClothing").click(function() {
     //$("#clothingModal").modal('hide');
-    clothingTitle.val().trim();
+
     var newClothes = {
         name: clothingTitle.val().trim(),
         category: clothingCategory.val().trim(),
         description: clothingDescription.val().trim(),
         closet: closetType.val().trim()
     }
-    console.log(newClothes);
-    return;
+
+    for (var key in newClothes) {
+        $("#item-" + key).removeClass("is-invalid");
+    }
+
+    if (clothingCategory.prop("selectedIndex") === 0){
+        newClothes.category = "Other";
+    }
+
+    if(closetType.prop("selectedIndex") ===0){
+        newClothes.closet = "Other";
+    }
+
+    for (var key in newClothes) {
+        var prop = newClothes[key];
+        if(prop.length < 1){
+            $("#item-" + key).addClass("is-invalid");
+        }
+    }
+
+    console.log(newClothes)
+    return
+
+
 
     $.ajax({
         data: newClothes,
