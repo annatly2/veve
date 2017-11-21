@@ -7,6 +7,7 @@ var cu = require("./crypto_utils");
 var models = require("../models");
 var User = models.User;
 var Garment = models.Garment;
+var Outfit = models.Outfit;
 
 module.exports = function(app) {
   var tu = require("./token_utils")(app);
@@ -268,6 +269,130 @@ module.exports = function(app) {
       })
     }
   );
+
+  router.get("/outfit/:id",
+    jwtauth,
+    forbiddenIfNoUser,
+    function(req, res) {
+      var userId = req.user.id;
+      var outfitId = req.params.id;
+
+      Outfit.findAll({
+        where: {
+          UserId: userId,
+          id: outfitId
+        },
+        include: [Garment]
+      })
+      .then(function(outfits) {
+        if (outfits.length !== 1) {
+          res.json({
+            error: true,
+            errorMsg: `expected 1 outfit, found ${outfits.length}`
+          });
+        } else {
+          res.json({
+            error: false,
+            outfit: outfits[0]
+          });
+        }
+      })
+      .catch(function(err) {
+        res.json({
+          error: true,
+          errorMsg: err.message
+        });
+      })
+    }
+  );
+
+  router.post("/outfit",
+    jwtauth,
+    forbiddenIfNoUser,
+    function(req, res) {
+      var outfit = req.body;
+      outfit.UserId = req.user.id;
+
+      Outfit.create(outfit)
+      .then(function(dbOutfit) {
+        res.json({
+          error: false,
+          outfit: dbOutfit
+        });
+      })
+      .catch(function(err) {
+        res.json({
+          error: true,
+          errorMsg: err.message
+        });
+      })
+    }
+  );
+
+  router.put("/outfit",
+    jwtauth,
+    forbiddenIfNoUser,
+    function(req, res) {
+      var outfit = req.body;
+
+      Outfit.update(outfit, {
+        where: {
+          UserId: req.user.id,
+          id: outfit.id
+        }
+      })
+      .then(function(updateCount) {
+        updateCount = updateCount[0];
+        if (updateCount === 1) {
+          res.json({
+            error: false
+          });
+        } else {
+          res.json({
+            error: true,
+            errorMsg: `expected to update 1 row, updated ${updateCount}`
+          });
+        }
+      })
+      .catch(function(err) {
+        res.json({
+          error: true,
+          errorMsg: err.message
+        });
+      })
+    }
+  );
+
+  router.delete("/outfit",
+    jwtauth,
+    forbiddenIfNoUser,
+    function(req, res) {
+      var outfit = req.body;
+
+      Outfit.destroy({
+        where: {
+          UserId: req.user.id,
+          id: garment.id
+        }
+      })
+      .then(function(deleteCount) {
+        if (deleteCount === 1) {
+          res.json({
+            error: false
+          })
+        } else {
+          res.json({
+            error: true,
+            errorMsg: `expected to delete 1 row, deleted ${deleteCount}`
+          });
+        }
+      })
+      .catch(function(err) {
+        res.json({
+          error: true,
+          errorMsg: err.message
+        });
+      })
     }
   );
 
