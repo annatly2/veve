@@ -64,40 +64,40 @@
                 <form id="clothingForm">
                     <div class="form-group row">
                         <div class="input-group m-2">
-                            <input type="text" class="form-control" placeholder="Title" aria-describedby="basic-addon1">
+                            <input type="text" id = "clothingTitle" class="form-control" placeholder="Title" aria-describedby="basic-addon1">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="input-group m-2">
-                            <input type="text" class="form-control" placeholder="Description" aria-describedby="basic-addon1">
+                            <input type="text" id = "clothingDescription" class="form-control" placeholder="Description" aria-describedby="basic-addon1">
                         </div>
                     </div>
+
+
+
                     <div class="form-group row">
-                            <div class="dropdown input-group m-2">
-                                <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Category" aria-describedby="basic-addon1">
-                                <span class="caret"></span>
-                                <ul class="dropdown-menu">
-                                  <li><a href="#" class="text-info">Headwear</a></li>
-                                  <li><a href="#" class="text-info">Top</a></li>
-                                  <li><a href="#" class="text-info">Outerwear</a></li>
-                                  <li><a href="#" class="text-info">Bottoms</a></li>
-                                  <li><a href="#" class="text-info">Shoes</a></li>
-                                </ul>
+                            <div class="input-group m-2">
+                                <select id = "clothingCategory" class="form-control">
+                                    <option>Headwear</option>
+                                    <option>Top</option>
+                                    <option>Outerwear</option>
+                                    <option>Bottoms</option>
+                                    <option>Shoes</option>
+                                </select>
                             </div>
-                        </div>
+                    </div>
+
                     <div class="form-group row">
-                            <div class="dropdown input-group m-2">
-                                <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Closet" aria-describedby="basic-addon1">
-                                <span class="caret"></span>
-                                <ul class="dropdown-menu">
-                                  <li><a href="#" class="text-info">Active</a></li>
-                                  <li><a href="#" class="text-info">Casual</a></li>
-                                  <li><a href="#" class="text-info">Formal</a></li>
-                                  <li><a href="#" class="text-info">Work</a></li>
-                                  <li><a href="#" class="text-info">Other</a></li>
-                                </ul>
+                            <div class="input-group m-2">
+                                <select id = "closetType" class="form-control">
+                                    <option>Active</option>
+                                    <option>Casual</option>
+                                    <option>Formal</option>
+                                    <option>Work</option>
+                                    <option>Other</option>
+                                </select>
                             </div>
-                        </div>
+                    </div>
 
                     <div class = "form-group row m-2">
                         <div class = "input-group">
@@ -196,7 +196,10 @@
 <script src="/assets/js/utils.js"></script>
 
 <script>
+
 var token = getLocalAccessToken();
+var fileInput = $("#selectFile");
+
 // $.ajax({
 //     method: "GET",
 //     url: "/api/username",
@@ -249,7 +252,7 @@ $('#goToClosets').click(function(){
 });
 
 
-var fileInput = $("#selectFile");
+
 
 
 </script>
