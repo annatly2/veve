@@ -73,11 +73,10 @@
                         </div>
                     </div>
 
-
-
                     <div class="form-group row">
                             <div class="input-group m-2">
                                 <select id = "clothingCategory" class="form-control">
+                                    <label>Select a clothing category</label>
                                     <option>Headwear</option>
                                     <option>Top</option>
                                     <option>Outerwear</option>
@@ -199,30 +198,23 @@
 
 var token = getLocalAccessToken();
 var fileInput = $("#selectFile");
-
-// $.ajax({
-//     method: "GET",
-//     url: "/api/username",
-//     beforeSend: setAccessTokenHeader(token)
-//   })
-//   .done(function(response) {
-//     console.log(response);
-//   });
-//   .fail(function(err) {
-//     window.localStorage.removeItem("access_token");
-//     failure(err);
-//   });
-
+var clothingTitle = $("#clothingTitle");
+var clothingDescription = $("#clothingDescription");
+var clothingCategory = $("#clothingCategory");
+var closetType = $("#closetType");
 
 
 $("#submitClothing").click(function() {
-    $("#clothingModal").modal('hide');
+    //$("#clothingModal").modal('hide');
+    clothingTitle.val().trim();
     var newClothes = {
-        name: "test",
-        category: "test1",
-        color: "test2",
-        closet: "formal"
+        name: clothingTitle.val().trim(),
+        category: clothingCategory.val().trim(),
+        description: clothingDescription.val().trim(),
+        closet: closetType.val().trim()
     }
+    console.log(newClothes);
+    return;
 
     $.ajax({
         data: newClothes,
