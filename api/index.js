@@ -25,6 +25,14 @@ module.exports = function(app) {
     res.end("Forbidden");
   }
 
+  function forbiddenIfNoUser(req, res, next) {
+    if (req.user == undefined) {
+      return forbidden(req, res);
+    } else {
+      next();
+    }
+  }
+
   router.post("/signup", function(req, res) {
     var values = req.body || req.params;
     uu.get(values.email)
@@ -67,11 +75,8 @@ module.exports = function(app) {
 
   router.get("/username",
     jwtauth,
+    forbiddenIfNoUser,
     function(req, res) {
-      if (req.user === undefined) {
-        return forbidden(req, res);
-      }
-
       cu.decrypt(req.user.username, req.user.salt)
         .then(function(decryptedUsername) {
           res.json({
@@ -84,11 +89,8 @@ module.exports = function(app) {
 
   router.put("/account",
     jwtauth,
+    forbiddenIfNoUser,
     function(req, res) {
-      if (req.user == null) {
-        return forbidden(req, res);
-      }
-
       var header = auth(req);
       if (header == undefined) {
         return forbidden(req, res);
@@ -125,11 +127,8 @@ module.exports = function(app) {
 
   router.delete("/account",
     jwtauth,
+    forbiddenIfNoUser,
     function(req, res) {
-      if (req.user === undefined) {
-        return forbidden(req, res);
-      }
-
       var header = auth(req);
       if (header === undefined) {
         return forbidden(req, res);
@@ -155,11 +154,8 @@ module.exports = function(app) {
 
   router.get("/clothes/:closet",
     jwtauth,
+    forbiddenIfNoUser,
     function(req, res) {
-      if (req.user === undefined) {
-        return forbidden(req, res);
-      }
-
       var query = {where: {UserId: req.user.dataValues.id}};
       if (req.params.closet !== "all") {
         query.where.closet = req.params.closet;
@@ -184,11 +180,8 @@ module.exports = function(app) {
 
   router.post("/clothes",
     jwtauth,
+    forbiddenIfNoUser,
     function(req, res) {
-      if (req.user === undefined) {
-        return forbidden(req, res);
-      }
-
       var garment = req.body;
       garment.UserId = req.user.id;
       // TODO: encrypt garment.image
@@ -202,11 +195,8 @@ module.exports = function(app) {
 
   router.put("/clothes",
     jwtauth,
+    forbiddenIfNoUser,
     function(req, res) {
-      if (req.user === undefined) {
-        return forbidden(req, res);
-      }
-
       var garment = req.body;
 
       Garment.update(garment, {
@@ -233,11 +223,8 @@ module.exports = function(app) {
 
   router.delete("/clothes",
     jwtauth,
+    forbiddenIfNoUser,
     function(req, res) {
-      if (req.user === undefined) {
-        return forbidden(req, res);
-      }
-
       var garment = req.body;
 
       Garment.destroy({
