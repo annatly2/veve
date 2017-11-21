@@ -26,15 +26,16 @@ module.exports = function(app) {
   }
 
   router.post("/signup", function(req, res) {
-    uu.get(req.body.email)
+    var values = req.body || req.params;
+    uu.get(values.email)
       .then(function(user) {
         if (user !== null) {
           throw new Error("email already registered")
         }
-        return uu.create(req.body.email, req.body.password, req.body.username);
+        return uu.create(values.email, values.password, values.username);
       })
       .then(function(newUser) {
-        var token = tu.create(req.body.email);
+        var token = tu.create(values.email);
         res.json({
           error: false,
           session: token
