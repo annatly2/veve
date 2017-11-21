@@ -8,26 +8,34 @@
    integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
    <title>Create Closet Start</title>
 </head>
+<style>
+
+    #clothingSuccessModal {
+        top: calc(35% - 118px);
+    }
+
+    #clothingSuccessConainer {
+        width: 50%;
+    }
+
+</style>
 <body>
 
 <div class="jumbotron jumbotron-fluid bg-info text-white">
     <div class="container text-center">
-        <h1 class="display-3">Closets</h1>
+        <h1 class="display-3">Upload</h1>
     </div>
         <div>
             <ul class="nav nav-tabs justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Closets</a>
+                    <a class="nav-link text-white" href="closets.html">Closets</a>
                     <span class="border-bottom-0 border-info"></span>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Profile</a>
+                    <a class="nav-link text-white" href="profile.html">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active text-white bg-info" href="#">Upload</a>
+                    <a class="nav-link active text-white bg-info" href="createcloset.html">Upload</a>
                 </li>
             </ul>
         </div>
@@ -67,11 +75,6 @@
                             <input type="text" class="form-control" placeholder="Closet" aria-describedby="basic-addon1">
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="input-group m-2">
-                            <input type="text" class="form-control" placeholder="Date Purhcased" aria-describedby="basic-addon1">
-                        </div>
-                    </div>
                     <div class="form-group row m-2">
                         <div class="col-12 text-center">
                             <!-- This button will activate the add clothing modal WITHOUT JavaScript -->
@@ -92,15 +95,19 @@
       </div>
 
    <!-- Clothing Success Modal -->
-   <div id="clothingSuccessModal" class="modal fade bd-example-modal-sm align-middle" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content align-middle">
+   <div id="clothingSuccessModal" class="modal fade bd-example-modal-sm align-middle" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" id="clothingSuccessContainer">
+            <div id="verticalAlign" class="modal-content">
                 <div class="container text-secondary">
-                    <h1 class="text-center">Clothing Added!</h1>
+                    <h2 class="text-center">Clothing Added!</h2>
                 <div class="row text-center">
-                    <div class="col-12">
+                    <div class="col-12 mb-0">
+                        <button type="button" class="btn btn-info mt-4" id="goToClosets">Go To Closets</button>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-12 mb-2">
                         <button type="button" class="btn btn-info mt-4" id="addMoreClothes">Add More Clothes</button>
-                        <button type="button" class="btn btn-info mt-4" id="goToClosets">Got To Your Closets</button>
                     </div>
                 </div>
 
@@ -154,7 +161,7 @@
 <!-- /container -->
 </div> <!-- /container -->
     
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
@@ -171,6 +178,9 @@ $('#addMoreClothes').click(function() {
     $('#clothingModal').modal('show');
 });
 
+$('#goToClosets').click(function(){
+    window.location.href="closets.html";
+});
 
 
 
