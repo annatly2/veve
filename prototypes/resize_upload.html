@@ -120,11 +120,13 @@ function rotate() {
     // skip original, shouldn't be rotated
     for (var i = 1; i < imgs.length; i++) {
         var img = imgs[i];
-        if (img.className === "rotated") {
-            img.className = "";
-        } else {
-            img.className = "rotated";
-        }
+        var canvas = document.createElement("canvas");
+        canvas.width = img.naturalHeight;
+        canvas.height = img.naturalWidth;
+        var ctx = canvas.getContext("2d");
+        ctx.rotate(0.5*Math.PI);
+        ctx.drawImage(img, 0, -img.naturalHeight, img.naturalWidth, img.naturalHeight);
+        img.src = canvas.toDataURL("image/png");
     }
 };
 </script>
