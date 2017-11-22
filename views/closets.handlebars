@@ -1,0 +1,20 @@
+<div class="row justify-content-center">
+	{{#each closetTypes}}
+	<div class="col-xs-2 m-1">
+		<div class="card">
+			<div class="card-body text-center">
+				<a href="/closet/{{title}}">
+					<img class="card-img-top img-fluid closet-icon" src="{{img}}" alt="{{title}} icon">
+					<h4 class="card-title">{{title}}</h4>
+				</a>
+			</div>
+		</div>
+	</div>
+	{{/each}}
+</div>
+
+<script type="text/javascript">
+function ready() {
+  $("#closetsTab").addClass("active bg-info");
+}
+</script>

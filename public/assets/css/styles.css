@@ -1,0 +1,14 @@
+/* Closets */
+
+.closet-icon {
+	height: 128px;
+	width: 128px;
+}
+
+@media only screen and (min-width: 768px) {
+	/* For desktop: */
+	.closet-icon {
+		height: 256px;
+		width: 256px;
+	}
+}

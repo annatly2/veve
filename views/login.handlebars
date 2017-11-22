@@ -31,12 +31,7 @@ function ready() {
   var loginBtn = $("#loginButton");
   var signUpBtn = $("#signUpButton");
 
-  checkAccessToken(
-    function success() {
-      // automatic login if token already exists
-      window.location = loginSuccessURL
-    }
-  );
+  automaticLogin(loginSuccessURL);
 
   loginBtn.click(function(e) {
     e.preventDefault();

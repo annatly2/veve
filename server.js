@@ -16,13 +16,7 @@ app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
 app.use("/api", require("./api")(app));
-app.get("/", function(req, res) {
-  res.render("login", {layout: "landing"});
-})
-
-app.get("/signup", function(req, res) {
-  res.render("signup", {layout: "landing"});
-})
+app.use("/", require("./web")(app));
 
 var db_options = {};
 if (process.env.NODE_DB_ENV === "overwrite") {

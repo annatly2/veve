@@ -1,5 +1,5 @@
 <form id="signupForm">
-	<!-- Username, email, and password inputs -->
+	<!-- Username field -->
 	<div class="form-group row">
 		<div class="col">
 			<label for="usernameField" class="col-form-label">Display Name</label>
@@ -8,6 +8,7 @@
 		</div>
 	</div>
 
+	<!-- Email field -->
 	<div class="form-group row">
 		<div class="col">
 			<label for="emailField" class="col-form-label">Email</label>
@@ -20,6 +21,7 @@
 		</div>
 	</div>
 
+	<!-- Password field -->
 	<div class="form-group row">
 		<div class="col">
 			<label for="passwordField" class="col-form-label">Password</label>
@@ -43,6 +45,7 @@
 		</div>
 	</div>
 
+	<!-- Link to log in page -->
 	<div class="form-group row">
 		<div class="col">
 			<p>Already have an account? Log in <a href="/">here</a>.</p>
@@ -67,13 +70,8 @@ function ready() {
     usernameField.removeClass("is-invalid");
   }
 
-  checkAccessToken(
-    function success() {
-      // automatic login if token already exists
-      window.location = loginSuccessURL
-    }
-  );
-  
+  automaticLogin(loginSuccessURL);
+
   showPassword.change(function() {
     if (this.checked) {
       passwordField.attr("type", "text");
