@@ -1,14 +1,40 @@
 /* Closets */
 
-.closet-icon {
-	height: 128px;
-	width: 128px;
+.add-clothes-button {
+	height: 312px;
+}
+
+.closet-icon,
+.outfit-icon {
+	height: 192px;
+	width: 192px;
+}
+
+.outfit-buttons {
+	margin: 0 0.15rem 0 0.15rem;
+}
+
+.bg-info, .btn-info, #selectFile {
+	transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+	background: #00a1bf;
+	background: -moz-linear-gradient(left, rgba(0, 161, 191, 1) 0%, rgba(0, 202, 221, 1) 100%);
+	background: -webkit-linear-gradient(left, rgba(0, 161, 191, 1) 0%, rgba(0, 202, 221, 1) 100%);
+	background: linear-gradient(to right, rgba(0, 161, 191, 1) 0%, rgba(0, 202, 221, 1) 100%);
+}
+
+.card {
+	box-shadow: 5px 5px 5px lightgrey;
 }
 
 @media only screen and (min-width: 768px) {
 	/* For desktop: */
-	.closet-icon {
+	.closet-icon,
+	.outfit-icon {
 		height: 256px;
 		width: 256px;
+	}
+
+	.add-clothes-button {
+		height: 376px;
 	}
 }
