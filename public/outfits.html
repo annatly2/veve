@@ -36,26 +36,28 @@
     </div>
 
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" id="outfitRow">
         <div class="col-xs-2 m-1">
             <div class="card" id="addClothesButton">
                 <div class="card-body text-center">
                     <img class="card-img-top img-fluid" id="outfit-icon" src="../assets/img/plus.png" alt="outfit image">
-                    <h4 class="card-title">Add Outfit</h4>
+                    <div class="col-xs-2 mt-2">
+                        <button type="button" class="btn btn-info mt-3" id="addOutfitButton">Add New Outfit</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-xs-2 m-1">
+        <!-- <div class="col-xs-2 m-1">
                 <div class="card">
                     <div class="card-body text-center">
                         <img class="card-img-top img-fluid" id="outfit-icon" src="../assets/img/plus.png" alt="outfit image">
                         <h4 class="card-title">Outfit 1</h4>
                         <a href="#" class="btn btn-info">View</a>
-                        <a href="#" class="btn btn-info">Remove Outlet</a>
+                        <a href="#" class="btn btn-info">Delete</a>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
     </div>
 </div>
@@ -127,6 +129,41 @@
 
         <!--Clothing Modal closer -->
       </div>
+
+    <!-- Create Outfit Modal -->
+<div class="modal fade bd-modal-lg" id="createOutfitModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="container">
+                <form id="clothingForm">
+                    <div class="form-group row">
+                        <div class="input-group m-2">
+                            <input type="text" class="form-control" placeholder="Title" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="input-group m-2">
+                            <input type="text" class="form-control" placeholder="Description" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="form-group row m-2">
+                        <div class="col-12 text-center">
+                            <!-- This button will activate the add clothing modal WITHOUT JavaScript -->
+                            <!-- <button type="button btn-info" class="btn btn-info mt-4" data-toggle="modal" data-target="#successModal">Add Clothing</button> -->
+                            
+                            <!-- This button will activate the add closet modal WITH JavaScript -->
+                            <button type="button" class="btn btn-info mt-4" id="submitOutfit">Add Outfit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+          </div>
+        </div>
+
+        <!--Outfit Modal closer -->
+      </div>
     
 <!-- View Outfit Modal -->
 <div class="modal fade bd-modal-lg" id="viewOutfitModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -163,9 +200,10 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-<script>
+    <script src="/assets/js/utils.js"></script>
+    <script>
 
-var token = getLocalAccessToken();w
+var token = getLocalAccessToken();
 var fileInput = $("#selectFile");
 var clothingTitle = $("#item-name");
 var clothingDescription = $("#item-description");
@@ -224,11 +262,32 @@ var closetType = $("#item-closet");
     })
 });
 
-$("#addClothesButton").click(function(e){
-        $('#clothingModal').modal('show');
+$("#addOutfitButton").click(function(e){
+        $('#createOutfitModal').modal('show');
     });
+ 
+
+$('#submitOutfit').click(function(e){
+    event.preventDefault();
+ 
+  var outfitImage = ('<img class="card-img-top img-fluid" id="outfit-icon" src="../assets/img/plus.png" alt="outfit image">');
+  var outfitTitle = ('<h4 class="card-title">Outfit 1</h4>');
+  var createdOutfit = ('<div class="col-xs-2 m-1" id="outfitColumn"><div class="card"><div class="card-body text-center">' + outfitImage + outfitTitle + '<a href="#" id="viewOutfit" class="btn btn-info outfitButtons">View</a><a href="#" id="deleteOutfit" class="btn btn-info outfitButtons">Delete</a></div></div></div>');
+
+  $('#outfitRow').append(createdOutfit);
+
+});
+
+$(document).on('click', '#outfitColumn', function(e){
+    $(this).remove();
+});
+
+$(document).on('click', '#viewOutfit', function(e){
+    window.location.href="currentoutfit.html";
+});
+
     
-    </script> 
+</script> 
 
 </body>
  </html>

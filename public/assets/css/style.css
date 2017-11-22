@@ -56,6 +56,13 @@ body {
 .card {
    box-shadow: 5px 5px 5px lightgrey; 
 }
+
+.outfitButtons {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: .15rem;
+    margin-right: .15rem;
+}
 .bg-info, .btn-info, #selectFile  {
     /* background-image: linear-gradient(to bottom right, #94C2FF 0%, #1ABAD4 100%); */
     background-image: full_gradient 
