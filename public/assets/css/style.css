@@ -39,6 +39,10 @@ body {
 
 /* Remove this to see some new styling ideas */
 
+#addClothesButton {
+    height: 312px;
+}
+
 #outfit-icon {
     height: 192px;
     width: 192px;
@@ -53,13 +57,13 @@ body {
    box-shadow: 5px 5px 5px lightgrey; 
 }
 .bg-info, .btn-info, #selectFile  {
-    background-image: linear-gradient(to bottom right, #94C2FF 0%, #1ABAD4 100%);
-    /* background-image: full_gradient 
+    /* background-image: linear-gradient(to bottom right, #94C2FF 0%, #1ABAD4 100%); */
+    background-image: full_gradient 
         transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         background: #00a1bf;
         background: -moz-linear-gradient(left, rgba(0, 161, 191, 1) 0%, rgba(0, 202, 221, 1) 100%);
         background: -webkit-linear-gradient(left, rgba(0, 161, 191, 1) 0%, rgba(0, 202, 221, 1) 100%);
-        background: linear-gradient(to right, rgba(0, 161, 191, 1) 0%, rgba(0, 202, 221, 1) 100%); */
+        background: linear-gradient(to right, rgba(0, 161, 191, 1) 0%, rgba(0, 202, 221, 1) 100%);
 }
 
 @media only screen and (min-width: 768px) {
@@ -72,6 +76,10 @@ body {
     #outfit-icon {
         height: 256px;
         width: 256px;
+    }
+
+    #addClothesButton {
+        height: 376px;
     }
     
 }
