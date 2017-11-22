@@ -5,7 +5,7 @@
 			<div class="card-body text-center">
 				<a href="/closet/{{title}}" class="text-dark">
 					<img class="card-img-top img-fluid closet-icon" src="/assets/img/{{title}}.jpg" alt="{{title}} icon">
-					<h4 class="card-title">{{title}}</h4>
+					<h4 class="card-title">{{capitalize title}}</h4>
 				</a>
 			</div>
 		</div>
@@ -15,6 +15,6 @@
 
 <script type="text/javascript">
 function ready() {
-  $("#closetsTab").addClass("active bg-info");
+  $("#closetsTab").addClass("active bg-secondary");
 }
 </script>

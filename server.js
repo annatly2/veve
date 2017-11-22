@@ -1,6 +1,7 @@
 var express = require("express");
 var exphbs = require("express-handlebars");
 var bodyparser = require("body-parser");
+var hbs = require("handlebars");
 var db = require("./models");
 
 var PORT = process.env.PORT || 8000;
@@ -13,6 +14,10 @@ app.set("jwtSecret", process.env.JWT_SECRET || "JWT_TESTING");
 
 app.engine("handlebars", exphbs({defaultLayout: "main"}));
 app.set("view engine", "handlebars");
+
+hbs.registerHelper("capitalize", function(context, options) {
+  return context[0].toUpperCase() + context.slice(1);
+});
 
 app.use(express.static("public"));
 app.use("/api", require("./api")(app));
