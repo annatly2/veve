@@ -7,18 +7,15 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
 	integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<link rel="stylesheet" href="/assets/css/styles.css">
-	<title>VeVe | {{metaTags.title}}</title>
+	<title>VeVe | {{capitalize metaTags.title}}</title>
 </head>
 <body>
-	<div class="bg-info text-white mb-3">
+	<header class="bg-info text-white mb-3">
 		<div class="container text-center">
-			<h1 class="display-3"><a href="/" class="text-white">VeVe</a></h1>
+			<h1 class="display-3"><a href="/closets" class="text-white">VeVe</a></h1>
 		</div>
 		<div>
 			<ul class="nav nav-tabs justify-content-center">
-				<li class="nav-item">
-					<a class="nav-link text-white" id="profileTab" href="/profile">Profile</a>
-				</li>
 				<li class="nav-item">
 					<a class="nav-link text-white" id="closetsTab" href="/closets">Closets</a>
 				</li>
@@ -26,11 +23,14 @@
 					<a class="nav-link text-white" id="outfitsTab" href="/outfits">Outfits</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link text-white" id="uploadTab" href="/upload">Upload</a>
+					<a class="nav-link text-white" id="profileTab" href="/profile">Profile</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-white" id="signoutTab" href="#" onclick="signOut();">Sign Out</a>
 				</li>
 			</ul>
 		</div>
-	</div>
+	</header>
 
 	<div class="container">
 		{{{ body }}}

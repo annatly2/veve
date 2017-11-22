@@ -28,9 +28,9 @@ module.exports = function() {
   });
 
   router.get("/closet/:closet", function(req, res) {
-    // res.locals.metaTags = {
-    //   title: "halp"
-    // };
+    res.locals.metaTags = {
+      title: req.params.closet
+    };
     res.render("closet", {layout: "main"});
   });
 
