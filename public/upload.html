@@ -100,10 +100,14 @@
                             </div>
                     </div>
 
-                    <div class = "form-group row m-2">
-                        <div class = "input-group">
+                    <div class = "form-group row">
+                        <div class = "input-group m-2">
                             <input class = "form-control" id = "selectFile" type = "file" accept="image/*">
-                            <img id = "uploadImg">
+                        </div>
+                    </div>
+                    <div class = "form-group row">
+                        <div class = "col">
+                            <img id = "uploadImg" src="/assets/img/pizzashirt.jpg" width="200" height="200">
                         </div>
                     </div>
                     <div class="form-group row m-2">
@@ -112,6 +116,8 @@
                             <!-- <button type="button btn-info" class="btn btn-info mt-4" data-toggle="modal" data-target="#successModal">Add Clothing</button> -->
                             
                             <!-- This button will activate the add clothing modal WITH JavaScript -->
+                            <button type="button" class="btn btn-info mt-4" id="imgRotate">Rotate Image</button>
+                            <button type="button" class="btn btn-info mt-4" id="deleteRotate">Delete Image</button>
                             <button type="button" class="btn btn-info mt-4" id="submitClothing">Add Clothing</button>
                         </div>
                     </div>
@@ -243,7 +249,7 @@ fileInput.change(function(){
                 ctx2.drawImage(canvas, 0, 0, w, h);
 
                 // draw to page with various JPEG compression rates
-                var data = canvas2.toDataURL("image/png");
+                var data = canvas2.toDataURL("image/jpeg", 1.0);
                 $("#uploadImg").attr("src", data);
 
             };
@@ -289,9 +295,19 @@ $("#submitClothing").click(function() {
         return;
     }
 
-    
-
-
+    if(fileInput[0].files.length > 0){
+        var canvas = $("<canvas>")[0];
+        var img = $("#uploadImg")[0];
+        var w = img.naturalWidth;
+        var h = img.naturalHeight;
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        var data = canvas.toDataURL("image/jpeg", 0.5);
+        console.log(data.length)
+        newClothes.image = data;
+    }
 
     $.ajax({
         data: newClothes,
