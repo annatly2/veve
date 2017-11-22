@@ -11,6 +11,10 @@ header,
 	box-shadow: 0px 5px 5px lightgrey;
 }
 
+.nav-item a.active {
+	border-bottom: 0;
+}
+
 footer .container a {
 	padding-left: 10px;
 	padding-right: 10px;
