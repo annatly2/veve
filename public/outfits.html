@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
     integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
-   <link rel="stylesheet" type="text/css" href="../public/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
    <title>VeVe</title>
 </head>
 <body>
@@ -23,10 +23,10 @@
                     <a class="nav-link text-white" href="profile.html">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white active bg-info" href="closets.html">Closets</a>
+                    <a class="nav-link text-white" href="closets.html">Closets</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="outfits.html">Outfits</a>
+                    <a class="nav-link text-white active bg-info" href="outfits.html">Outfits</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="upload.html">Upload</a>
@@ -35,30 +35,42 @@
         </div>
     </div>
 
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-xs-2 m-1">
             <div class="card">
                 <div class="card-body text-center">
-                    <h4 class="card-title">Outfit One</h4>
-                    <p class="card-text">Monday outfit</p>
+                    <img class="card-img-top img-fluid" id="outfit-icon" src="../assets/img/casual.jpg" alt="outfit image">
+                    <h4 class="card-title">Outfit 1</h4>
                     <a href="#" class="btn btn-info">View</a>
-                    <a href="#" class="btn btn-info">Delete</a>
+                    <a href="#" class="btn btn-info">Remove Outlet</a>
                 </div>
             </div>
         </div>
-       
-        <div class="col-xs-2 m-1">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h4 class="card-title">Rainy day</h4>
-                    <p class="card-text">I wear this on rainy days to work</p>
-                    <button type="button" class="btn btn-info mt-4" data-toggle="modal" data-target="#viewOutfitModal">View</button>
-                    <a href="#" class="btn btn-info">Delete</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
+        <div class="col-xs-2 m-1">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <img class="card-img-top img-fluid" id="outfit-icon" src="../assets/img/casual.jpg" alt="outfit image">
+                        <h4 class="card-title">Outfit 1</h4>
+                        <a href="#" class="btn btn-info">View</a>
+                        <a href="#" class="btn btn-info">Remove Outlet</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-2 m-1">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <img class="card-img-top img-fluid" id="outfit-icon" src="../assets/img/formal.jpg" alt="outfit image">
+                            <h4 class="card-title">Outfit 1</h4>
+                            <a href="#" class="btn btn-info">View</a>
+                            <a href="#" class="btn btn-info">Remove Outlet</a>
+                        </div>
+                    </div>
+                </div>
+    </div>
+</div>
 
     
 <!-- View Outfit Modal -->
