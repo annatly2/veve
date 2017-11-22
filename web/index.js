@@ -18,11 +18,11 @@ module.exports = function() {
     res.render("closets", {
       layout: "main",
       closetTypes: [
-        {title: "active", img: ""},
-        {title: "casual", img: ""},
-        {title: "formal", img: ""},
-        {title: "work", img: ""},
-        {title: "other", img: ""},
+        {title: "active"},
+        {title: "casual"},
+        {title: "formal"},
+        {title: "work"},
+        {title: "other"},
       ]
     })
   });
