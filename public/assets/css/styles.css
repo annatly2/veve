@@ -32,10 +32,13 @@ footer .container a:not(:first-child) {
 
 .closet-icon,
 .outfit-icon,
-.garment-image,
 #addIcon {
 	height: 192px;
 	width: 192px;
+}
+
+.garment-image {
+	max-width: 192px;
 }
 
 .category-icon {
@@ -64,10 +67,13 @@ footer .container a:not(:first-child) {
 	/* For desktop: */
 	.closet-icon,
 	.outfit-icon,
-	.garment-image,
 	#addClothesCard-img {
 		height: 256px;
 		width: 256px;
+	}
+
+	.garment-image {
+		max-width: 256px;
 	}
 
 	.add-clothes-button {
