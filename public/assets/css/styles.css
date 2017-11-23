@@ -32,16 +32,22 @@ footer .container a:not(:first-child) {
 
 .closet-icon,
 .outfit-icon,
+.garment-image,
 #addIcon {
 	height: 192px;
 	width: 192px;
+}
+
+.category-icon {
+	width: 16px;
+	height: 16px;
 }
 
 .outfit-buttons {
 	margin: 0 0.15rem 0 0.15rem;
 }
 
-.bg-info, .btn-info, #selectFile {
+.bg-info, .btn-info {
 	transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 	background: #00a1bf;
 	background: -moz-linear-gradient(left, rgba(0, 161, 191, 1) 0%, rgba(0, 202, 221, 1) 100%);
@@ -49,10 +55,16 @@ footer .container a:not(:first-child) {
 	background: linear-gradient(to right, rgba(0, 161, 191, 1) 0%, rgba(0, 202, 221, 1) 100%);
 }
 
+#uploadImg {
+	max-width: 300px;
+	max-height: 300px;
+}
+
 @media only screen and (min-width: 768px) {
 	/* For desktop: */
 	.closet-icon,
 	.outfit-icon,
+	.garment-image,
 	#addClothesCard-img {
 		height: 256px;
 		width: 256px;
@@ -60,5 +72,10 @@ footer .container a:not(:first-child) {
 
 	.add-clothes-button {
 		height: 376px;
+	}
+
+	.category-icon {
+		width: 24px;
+		height: 24px;
 	}
 }

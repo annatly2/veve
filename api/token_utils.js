@@ -54,12 +54,12 @@ module.exports = function(app) {
           uu.get(decoded.iss)
             .then(function(user) {
               req.user = user;
-              next();
+              return next();
             })
             .catch(function(err) {
               console.error(err);
               req.error = err;
-              next();
+              return next();
             })
         } catch (err) {
           console.log(err);

@@ -197,7 +197,7 @@ module.exports = function(app) {
           id: req.params.id
         }
       };
-      
+
       Garment.findAll(query)
         .then(function(garments) {
           if (garments.length !== 1) {
@@ -210,6 +210,7 @@ module.exports = function(app) {
               .then(function(plaintext) {
                 res.json({
                   error: false,
+                  id: req.params.id,
                   image: plaintext
                 })
               })
@@ -238,10 +239,16 @@ module.exports = function(app) {
           garment.image = ciphertext;
 
           Garment.create(garment)
-            .then(function(dbGarment){
+            .then(function(g){
               res.json({
                 error: false,
-                garment: dbGarment
+                garment: {
+                  id: g.id,
+                  name: g.name,
+                  description: g.description,
+                  category: g.category,
+                  closet: g.closet
+                }
               });
             })
             .catch(function(err) {

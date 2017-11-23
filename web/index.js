@@ -1,5 +1,8 @@
 var express = require("express");
 
+var closetTypes = ["active", "casual", "formal", "work", "other"];
+var clothingCategories = ["headwear", "tops", "dresses", "outerwear", "bottoms", "shoes", "other"];
+
 module.exports = function() {
   var router = express.Router();
 
@@ -17,21 +20,19 @@ module.exports = function() {
     };
     res.render("closets", {
       layout: "main",
-      closetTypes: [
-        {title: "active"},
-        {title: "casual"},
-        {title: "formal"},
-        {title: "work"},
-        {title: "other"},
-      ]
+      closetTypes: closetTypes
     })
   });
 
   router.get("/closet/:closet", function(req, res) {
     res.locals.metaTags = {
-      title: req.params.closet
+      title: req.params.closet.toLowerCase()
     };
-    res.render("closet", {layout: "main"});
+    res.render("closet", {
+      layout: "main",
+      closetTypes: closetTypes,
+      clothingCategories: clothingCategories
+    });
   });
 
   return router;

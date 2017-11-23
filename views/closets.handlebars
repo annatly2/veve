@@ -3,9 +3,9 @@
 	<div class="col-xs-2 m-1">
 		<div class="card">
 			<div class="card-body text-center">
-				<a href="/closet/{{title}}" class="text-dark">
-					<img class="card-img-top img-fluid closet-icon" src="/assets/img/{{title}}.jpg" alt="{{title}} icon">
-					<h4 class="card-title">{{capitalize title}}</h4>
+				<a href="/closet/{{this}}" class="text-dark">
+					<img class="card-img-top img-fluid closet-icon" src="/assets/img/{{this}}.jpg" alt="{{this}} icon">
+					<h4 class="card-title">{{capitalize this}}</h4>
 				</a>
 			</div>
 		</div>
@@ -16,5 +16,6 @@
 <script type="text/javascript">
 function ready() {
   $("#closetsTab").addClass("active bg-info");
+  automaticTokenCheck();
 }
 </script>
