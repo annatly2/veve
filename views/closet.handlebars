@@ -276,6 +276,7 @@ function ready() {
 		})
 		.done(function(response) {
 			console.log(response);
+			window.location = "/closet/" + newGarment.closet;
 		})
 		.fail(function(err) {
 			console.log(err);
