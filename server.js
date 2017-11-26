@@ -16,7 +16,11 @@ app.engine("handlebars", exphbs({defaultLayout: "main"}));
 app.set("view engine", "handlebars");
 
 hbs.registerHelper("capitalize", function(context, options) {
-  return context[0].toUpperCase() + context.slice(1);
+  if (typeof context === "string") {
+    return context[0].toUpperCase() + context.slice(1);
+  } else {
+    return context;
+  }
 });
 
 app.use(express.static("public"));
