@@ -40,5 +40,9 @@ module.exports = function() {
     res.render("test", {layout: "main"});
   });
 
+  router.get("/profile", function(req, res) {
+    res.render("profile", {layout: "main"});
+  });
+
   return router;
 }
