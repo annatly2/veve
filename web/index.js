@@ -35,5 +35,9 @@ module.exports = function() {
     });
   });
 
+  router.get("/privacy", function(req, res) {
+    res.render("privacy", {layout: "landing"});
+  });
+
   return router;
 }
