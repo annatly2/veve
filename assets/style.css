@@ -59,3 +59,8 @@ body {
    height: 40px;
    width: 30px;
 }
+
+#carouselExampleIndicators{
+  max-width: 510px;
+  margin: 0 auto;
+}
