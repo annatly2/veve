@@ -1,0 +1,138 @@
+<form id="signupForm">
+	<!-- Username field -->
+	<div class="form-group row">
+		<div class="col">
+			<label for="usernameField" class="col-form-label">Display Name</label>
+			<input type="text" class="form-control" id="usernameField" placeholder="Display Name">
+			<small id="usernameHelp" class="form-text text-muted">What would you like to be called?</small>
+		</div>
+	</div>
+
+	<!-- Email field -->
+	<div class="form-group row">
+		<div class="col">
+			<label for="emailField" class="col-form-label">Email</label>
+			<input type="email" class="form-control" id="emailField" placeholder="Email">
+			<small id="emailHelp" class="form-text text-muted">
+				We'll never share your email with anyone else.
+				<br>
+				Learn more about our <a href="/privacy/">Privacy Policy</a>.
+			</small>
+		</div>
+	</div>
+
+	<!-- Password field -->
+	<div class="form-group row">
+		<div class="col">
+			<label for="passwordField" class="col-form-label">Password</label>
+			<input type="password" class="form-control" id="passwordField" placeholder="Password">
+			<small id="passwordHelp" class="form-text text-muted">Must be at least 8 characters long.</small>
+		</div>
+	</div>
+	<div class="form-check row">
+		<div class="col">
+			<label for="showPassword" class="form-label ml-4">
+				<input type="checkbox" class="form-check-input" id="showPassword">
+				Show Password
+			</label>
+		</div>
+	</div>
+
+	<!-- Submit button to create account -->
+	<div class="form-group row text-center">
+		<div class="col">
+			<button type="submit" id="createAccountBtn" class="btn btn-primary bg-info">Create Account</button>
+		</div>
+	</div>
+
+	<!-- Link to log in page -->
+	<div class="form-group row">
+		<div class="col">
+			<p>Already have an account? Log in <a href="/">here</a>.</p>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+function ready() {
+  var loginSuccessURL = "/closets";
+
+  // var emailRegex = /./i;
+  var form = $("#signupForm");
+  var emailField = $("#emailField");
+  var showPassword = $("#showPassword");
+  var passwordField = $("#passwordField");
+  var usernameField = $("#usernameField");
+  var createAccountBtn = $("#createAccountBtn");
+
+  function resetFields() {
+    emailField.removeClass("is-invalid");
+    passwordField.removeClass("is-invalid");
+    usernameField.removeClass("is-invalid");
+  }
+
+  automaticLogin(loginSuccessURL);
+
+  showPassword.change(function() {
+    if (this.checked) {
+      passwordField.attr("type", "text");
+    } else {
+      passwordField.attr("type", "password");
+    }
+  })
+
+  createAccountBtn.click(function(e) {
+    e.preventDefault();
+    resetFields();
+
+    var username = usernameField.val().trim();
+    var email = emailField.val().trim();
+    var password = passwordField.val().trim();
+    var invalidFlag = false;
+
+    if (username.length < 1) {
+      usernameField.addClass("is-invalid");
+      invalidFlag = true;
+    }
+
+    // would be better to use regex if we could actually send emails.
+    // for now, ignore the fact that there isn't a perfect email regex.
+    // if (!email.match(emailRegex)) {
+    if (email.length < 1) {
+      emailField.addClass("is-invalid");
+      invalidFlag = true;
+    }
+
+    if (password.length < 8) {
+      passwordField.addClass("is-invalid");
+      invalidFlag = true;
+    }
+
+    if (invalidFlag) {
+      return;
+    }
+
+    var data = {
+      email: email,
+      password: password,
+      username: username
+    };
+
+    $.ajax({
+      method: "POST",
+      url: "/api/signup",
+      data: data
+    })
+    .done(function(response) {
+      if (response.error) {
+        console.log(response.errorMsg);
+      } else {
+        setLocalAccessToken(response.session.token);
+        window.location = loginSuccessURL;
+      }
+    })
+    .fail(function(err) {
+      console.log(err);
+    })
+  });
+}
+</script>

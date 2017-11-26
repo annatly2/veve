@@ -55,3 +55,29 @@ function getAccessToken(email, password, success, failure) {
   })
   .fail(failure);
 }
+
+function automaticLogin(loginSuccessURL) {
+  checkAccessToken(
+    function success() {
+      window.location = loginSuccessURL;
+    }
+  );
+}
+
+function automaticTokenCheck() {
+  checkAccessToken(
+    function success() { return; },
+    function failure() {
+      window.location = "/";
+    }
+  );
+}
+
+function capitalize(word) {
+  return word[0].toUpperCase() + word.slice(1);
+}
+
+function signOut() {
+  window.localStorage.removeItem("access_token");
+  window.location = "/";
+}

@@ -3,11 +3,14 @@ module.exports = function(sequelize, DataTypes) {
     name: {
       type: DataTypes.STRING
     },
-    category: {
-      type: DataTypes.STRING
+    description: {
+      type: DataTypes.TEXT
     },
     image: {
       type: DataTypes.TEXT
+    },
+    category: {
+      type: DataTypes.STRING
     },
     closet: {
       type: DataTypes.STRING

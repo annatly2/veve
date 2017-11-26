@@ -1,0 +1,309 @@
+<h2 class="text-center">{{capitalize metaTags.title}} Closet</h2>
+
+<div class="row justify-content-center" id="clothes">
+	<div class="col-xs-2 m-1">
+		<div class="card">
+			<div class="card-body text-center">
+				<a href="#" id="addGarmentBtn" data-toggle="modal" data-target="#clothingModal">
+					<img class="card-img-top img-fluid" id="addIcon" src="/assets/img/plus.png" alt="outfit image">
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade bd-modal-lg" id="clothingModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="container">
+					<form id="clothingForm">
+							<div class="form-group row">
+									<div class="input-group m-2">
+											<input type="text" id="item-name" class="form-control" placeholder="Title">
+									</div>
+							</div>
+							<div class="form-group row">
+									<div class="input-group m-2">
+											<input type="text" id="item-description" class="form-control" placeholder="Description">
+									</div>
+							</div>
+
+							<div class="form-group row">
+											<div class="input-group m-2">
+													<select id="item-category" class="form-control">
+															<option>Select a Clothing Category&hellip;</option>
+													</select>
+											</div>
+							</div>
+
+							<div class="form-group row">
+											<div class="input-group m-2">
+													<select id="item-closet" class="form-control">
+															<option>Select a Closet Type&hellip;</option>
+													</select>
+											</div>
+							</div>
+
+							<div class="form-group row">
+									<div class="input-group m-2">
+											<input class="form-control" id="selectFile" type="file" accept="image/*">
+									</div>
+							</div>
+							<div class="form-group row invisible" id="uploadImgBox">
+									<div class="col-12 text-center">
+											<img id="uploadImg">
+									</div>
+									<div class="col-12 text-center">
+										<div class="row">
+											<div class="col-0 col-md-3"></div>
+											<a href="#" class="col col-md-3 btn mt-4" id="imgRotate">
+												<img src="/assets/glyph/si-glyph-circle-load-right.svg" class="category-icon">
+											</a>
+											<a href="#" class="col col-md-3 btn mt-4" id="imgDelete">
+												<img src="/assets/glyph/si-glyph-button-error.svg" class="category-icon flipH">
+											</a>
+										</div>
+									</div>
+							</div>
+							<div class="form-group row m-2">
+									<div class="col-12 text-center">
+											<button type="button" class="btn btn-info mt-4" id="submitClothing">Add Clothing</button>
+									</div>
+							</div>
+					</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function ready() {
+	$("#closetsTab").addClass("active bg-info");
+	automaticTokenCheck();
+	var token = getLocalAccessToken();
+
+	var garments = [];
+	var clothesBox = $("#clothes");
+	var fileInput = $("#selectFile");
+	var clothingTitle = $("#item-name");
+	var clothingDescription = $("#item-description");
+	var clothingCategory = $("#item-category");
+	var closetType = $("#item-closet");
+
+	var closetName = "{{metaTags.title}}";
+	var closetTypes = "{{closetTypes}}".split(",");
+	var clothingCategories = "{{clothingCategories}}".split(",");
+	var categoryEmojis = {
+		headwear: "&#x1F452;&#x1F3A9;",
+		tops: "&#x1F45A;&#x1F455;",
+		outerwear: "&#x1F9E5;",
+		dresses: "&#x1F457;",
+		bottoms: "&#x1F456;",
+		shoes: "&#x1F460;&#x1F45E;",
+		other: "&#x1F45C;"
+	}
+
+	clothingCategories.forEach(function(c) {
+		var option = $("<option>").text(capitalize(c)).attr("value", c);
+		$("#item-category").append(option);
+	});
+
+	closetTypes.forEach(function(t) {
+		var option = $("<option>").text(capitalize(t)).attr("value", t);
+		$("#item-closet").append(option);
+	});
+	$("#item-closet").val(closetName);
+
+	function newCard(id, img, content) {
+		var col = $("<div class='col-xs-2 m-1 clothes-card-wrapper'>");
+		var card = $("<div class='card'>").attr("id", id).appendTo(col);
+		var body = $("<div class='card-body text-center'>").appendTo(card);
+		var img = $("<img class='card-img-top img-fluid garment-image'>").attr({id: `${id}-img`, src: img}).appendTo(body);
+		body.append(content);
+		return col;
+	}
+
+	function drawCards() {
+		$(".clothes-card-wrapper").remove();
+
+		for (var i = 0; i < garments.length; i++) {
+			var g = garments[i];
+			console.log(g);
+			var gContent = $("<div class='mt-2'>");
+			$("<h4>").text(g.name).appendTo(gContent);
+			if (g.description.length > 0) {
+				$("<p class='text-left'>").text(g.description).appendTo(gContent);
+			}
+			var emoji = categoryEmojis[g.category] || "&#x2753;";
+			var category = $("<p class='text-right'>").html(emoji).appendTo(gContent);
+			newCard(`garment-${g.id}`, "", gContent).appendTo(clothesBox);
+
+			setTimeout(function(garmentID) {
+				$.ajax({
+					method: "GET",
+					url: "/api/clothes/img/" + garmentID,
+					beforeSend: setAccessTokenHeader(token)
+				})
+				.done(function(response) {
+					if (response.error) {
+						console.log(response.errorMsg);
+					} else {
+						$(`#garment-${garmentID}-img`).attr("src", response.image)
+					}
+				})
+			}, 0, g.id);
+		}
+	}
+
+	function resetModal() {
+		$("#item-closet").val(closetName);
+		$("#item-category").prop("selectedIndex", 0);
+		showUploadImage();
+		if (fileInput[0].files.length > 0) {
+			$("#uploadImgBox").removeClass("invisible");
+		} else {
+			$("#uploadImgBox").addClass("invisible");
+		}
+	}
+
+	$("#addGarmentBtn").click(function() {
+		resetModal();
+	});
+
+	fileInput.change(showUploadImage);
+
+	function showUploadImage() {
+		var files = fileInput[0].files;
+		if (files.length > 0) {
+			var file = files[0];
+			var reader = new FileReader();
+			reader.onloadend = function(e) {
+				var data = e.target.result;
+				var MAX_IMAGE_DIMENSION = 600;
+
+				var srcImg = new Image();
+				srcImg.onload = function() {
+					// calculate scaled dimensions
+					var width = srcImg.naturalWidth;
+					var height = srcImg.naturalHeight;
+					var w, h;
+					if (width > height) {
+						w = MAX_IMAGE_DIMENSION;
+						h = Math.floor(height * MAX_IMAGE_DIMENSION / width);
+					} else {
+						w = Math.floor(width  * MAX_IMAGE_DIMENSION / height);
+						h = MAX_IMAGE_DIMENSION;
+					}
+					// draw to intermediate size
+					var canvas2x = document.createElement("canvas");
+					canvas2x.width = w * 2;
+					canvas2x.height = h * 2;
+					var ctx2x = canvas2x.getContext("2d");
+					ctx2x.drawImage(srcImg, 0, 0, w*2, h*2);
+					// draw to final size
+					var canvas = document.createElement("canvas");
+					canvas.width = w;
+					canvas.height = h;
+					var ctx = canvas.getContext("2d");
+					ctx.drawImage(canvas2x, 0, 0, w, h);
+
+					// draw to page for user inspection
+					var scaledData = canvas.toDataURL("image/png");
+					$("#uploadImg").attr("src", scaledData);
+					$("#uploadImgBox").removeClass("invisible");
+				}
+				srcImg.src = data;
+			}
+			reader.readAsDataURL(file);
+		} else {
+			$("#uploadImg").attr("src", "");
+		}
+	}
+
+	$("#imgRotate").click(function() {
+		if ($("#uploadImg").attr("src").length > 0) {
+			var srcImg = $("#uploadImg")[0];
+			var canvas = document.createElement("canvas");
+			canvas.width = srcImg.naturalHeight;
+			canvas.height = srcImg.naturalWidth;
+			var ctx = canvas.getContext("2d");
+			ctx.rotate(0.5*Math.PI);
+			ctx.translate(0, -srcImg.naturalHeight);
+			ctx.drawImage(srcImg, 0, 0, srcImg.naturalWidth, srcImg.naturalHeight);
+			srcImg.src = canvas.toDataURL("image/png");
+		}
+	});
+
+	$("#imgDelete").click(function() {
+		fileInput[0].value = "";
+		$("#uploadImg").attr("src", "");
+		$("#uploadImgBox").addClass("invisible");
+	})
+
+	$("#submitClothing").click(function() {
+		var newGarment = {
+			name: clothingTitle.val().trim(),
+			description: clothingDescription.val().trim(),
+			category: clothingCategory.val().trim().toLowerCase(),
+			closet: closetType.val().trim().toLowerCase()
+		}
+
+		clothingTitle.removeClass("is-invalid");
+		if (newGarment.name.length < 1) {
+			clothingTitle.addClass("is-invalid");
+			return;
+		}
+
+		if (clothingCategory.prop("selectedIndex") === 0) newGarment.category = "other";
+		if (closetType.prop("selectedIndex") === 0) newGarment.closet = "other";
+
+		if ($("#uploadImg").attr("src").length > 0) {
+			var srcImg = $("#uploadImg")[0];
+			var canvas = document.createElement("canvas");
+			canvas.width = srcImg.naturalWidth;
+			canvas.height = srcImg.naturalHeight;
+			var ctx = canvas.getContext("2d");
+			ctx.drawImage(srcImg, 0, 0, srcImg.naturalWidth, srcImg.naturalHeight);
+			var imgData = canvas.toDataURL("image/jpeg", 0.5);
+			newGarment.image = imgData;
+		}
+
+		$.ajax({
+			method: "POST",
+			url: "/api/clothes",
+			data: newGarment,
+			beforeSend: setAccessTokenHeader(token)
+		})
+		.done(function(response) {
+			console.log(response);
+			window.location = "/closet/" + newGarment.closet;
+		})
+		.fail(function(err) {
+			console.log(err);
+			alert("Unable to upload image");
+		})
+	})
+
+	function getClothes() {
+		$.ajax({
+			method: "GET",
+			url: "/api/clothes/" + closetName,
+			beforeSend: setAccessTokenHeader(token)
+		})
+		.done(function(response) {
+			if (response.error) {
+				console.log(response.errorMsg);
+			} else {
+				garments = response.garments;
+				drawCards();
+			}
+		})
+		.fail(function(err) {
+			console.log(err);
+		})
+	}
+
+	resetModal();
+	getClothes();
+}
+</script>
