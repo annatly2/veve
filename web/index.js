@@ -39,5 +39,9 @@ module.exports = function() {
     res.render("privacy", {layout: "landing"});
   });
 
+  router.get("/about", function(req, res) {
+    res.render("about", {layout: "landing"});
+  });
+
   return router;
 }
