@@ -1,23 +1,31 @@
 <button id="test" type="submit">Test Button</button>
-
+<div id="filler"></div>
 
 
 <script type="text/javascript">
 function ready() {
+  automaticTokenCheck();
+	var token = getLocalAccessToken();
 
 $('#test').click(function() {
 
-var queryUrl = "api/token";
+
 
   $.ajax({
-    url: queryUrl,
-    method: "GET"
+    url: "/api/username",
+    method: "GET",
+    beforeSend: setAccessTokenHeader(token)
   })
   .done (function(response){
-    console.log(response);
+    console.log(response.username);
+    var username = $("<h1> Hello " + response.username + "!</h1>");
+    $('#filler').append(username);
   });
 
 });
+
+
+
    
 //ready function closer
 };//ready function closer
