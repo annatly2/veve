@@ -80,6 +80,7 @@
                                     <option>Select a Clothing Category&hellip;</option>
                                     <option>Headwear</option>
                                     <option>Tops</option>
+                                    <option>Dresses</option>
                                     <option>Outerwear</option>
                                     <option>Bottoms</option>
                                     <option>Shoes</option>
@@ -100,16 +101,27 @@
                             </div>
                     </div>
 
-                    <div class = "form-group row m-2">
-                        <div class = "input-group">
+                    <div class = "form-group row">
+                        <div class = "input-group m-2">
                             <input class = "form-control" id = "selectFile" type = "file" accept="image/*">
                         </div>
+<<<<<<< HEAD
+=======
+                    </div>
+                    <div class = "form-group row">
+                        <div class = "col">
+                            <img id = "uploadImg" src="/assets/img/pizzashirt.jpg" width="200" height="200">
+                        </div>
+                    </div>
+>>>>>>> d09f84ffe86d2d1bec8482071b89eae2da6313a0
                     <div class="form-group row m-2">
                         <div class="col-12 text-center">
                             <!-- This button will activate the add clothing modal WITHOUT JavaScript -->
                             <!-- <button type="button btn-info" class="btn btn-info mt-4" data-toggle="modal" data-target="#successModal">Add Clothing</button> -->
                             
                             <!-- This button will activate the add clothing modal WITH JavaScript -->
+                            <button type="button" class="btn btn-info mt-4" id="imgRotate">Rotate Image</button>
+                            <button type="button" class="btn btn-info mt-4" id="deleteRotate">Delete Image</button>
                             <button type="button" class="btn btn-info mt-4" id="submitClothing">Add Clothing</button>
                         </div>
                     </div>
@@ -204,6 +216,52 @@ var clothingDescription = $("#item-description");
 var clothingCategory = $("#item-category");
 var closetType = $("#item-closet");
 
+fileInput.change(function(){
+    //console.log(fileInput.length);
+    if (fileInput[0].files.length > 0){
+        var file = fileInput[0].files[0];
+        console.log(file);
+        var reader = new FileReader();
+        reader.onloadend = function(e){
+            var data = e.target.result;
+            var MAX_IMAGE_DIMENSION = 600;
+            var srcImg = new Image();
+            srcImg.onload = function() {
+        // calculate scaled dimensions
+                var width  = srcImg.naturalWidth;
+                var height = srcImg.naturalHeight;
+                var w, h;
+                if (width > height) {
+                    w = MAX_IMAGE_DIMENSION;
+                    h = Math.floor(height * MAX_IMAGE_DIMENSION / width);
+                } else {
+                    w = Math.floor(width  * MAX_IMAGE_DIMENSION / height);
+                    h = MAX_IMAGE_DIMENSION;
+                }
+                // draw to intermediate size
+                var canvas = document.createElement("canvas");
+                canvas.width = w * 2;
+                canvas.height = h * 2;
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(srcImg, 0, 0, w*2, h*2);
+
+                // draw to final size
+                var canvas2 = document.createElement("canvas");
+                canvas2.width = w;
+                canvas2.height = h;
+                var ctx2 = canvas2.getContext("2d");
+                ctx2.drawImage(canvas, 0, 0, w, h);
+
+                // draw to page with various JPEG compression rates
+                var data = canvas2.toDataURL("image/jpeg", 1.0);
+                $("#uploadImg").attr("src", data);
+
+            };
+             srcImg.src = data;
+        };
+        reader.readAsDataURL(file);
+    };
+});
 
 $("#submitClothing").click(function() {
     //$("#clothingModal").modal('hide');
@@ -227,17 +285,33 @@ $("#submitClothing").click(function() {
         newClothes.closet = "Other";
     }
 
+    var invalidFlag = false;
+
     for (var key in newClothes) {
         var prop = newClothes[key];
         if(prop.length < 1){
             $("#item-" + key).addClass("is-invalid");
+            invalidFlag = true;
         }
     }
 
-    console.log(newClothes)
-    return
+    if (invalidFlag){
+        return;
+    }
 
-
+    if(fileInput[0].files.length > 0){
+        var canvas = $("<canvas>")[0];
+        var img = $("#uploadImg")[0];
+        var w = img.naturalWidth;
+        var h = img.naturalHeight;
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        var data = canvas.toDataURL("image/jpeg", 0.5);
+        console.log(data.length)
+        newClothes.image = data;
+    }
 
     $.ajax({
         data: newClothes,

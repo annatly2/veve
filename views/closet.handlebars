@@ -4,7 +4,7 @@
 	<div class="col-xs-2 m-1">
 		<div class="card">
 			<div class="card-body text-center">
-				<a href="#" id="addGarmentBtn" data-toggle="modal" data-target="#clothingModal">
+				<a href="#" id="addGarmentBtn">
 					<img class="card-img-top img-fluid" id="addIcon" src="/assets/img/plus.png" alt="outfit image">
 				</a>
 			</div>
@@ -70,8 +70,12 @@
 									</div>
 							</div>
 							<div class="form-group row m-2">
-									<div class="col-12 text-center">
-											<button type="button" class="btn btn-info mt-4" id="submitClothing">Add Clothing</button>
+									<div class="col-12 text-center" id="submitClothing">
+											<button type="button" class="btn btn-info mt-4">Add Clothing</button>
+									</div>
+									<div class="col-12 text-center" id="editClothing">
+										<button type="button" class="btn btn-info mt-4" id="updateClothing">Update Clothing</button>
+										<button type="button" class="btn btn-danger mt-4" id="deleteClothing">Delete Clothing</button>
 									</div>
 							</div>
 					</form>
@@ -86,9 +90,10 @@ function ready() {
 	automaticTokenCheck();
 	var token = getLocalAccessToken();
 
-	var garments = [];
+	var garments = {};
 	var clothesBox = $("#clothes");
 	var fileInput = $("#selectFile");
+	var modalTitle = $("#modalTitle");
 	var clothingTitle = $("#item-name");
 	var clothingDescription = $("#item-description");
 	var clothingCategory = $("#item-category");
@@ -130,9 +135,8 @@ function ready() {
 	function drawCards() {
 		$(".clothes-card-wrapper").remove();
 
-		for (var i = 0; i < garments.length; i++) {
-			var g = garments[i];
-			console.log(g);
+		for (var id in garments) {
+			var g = garments[id];
 			var gContent = $("<div class='mt-2'>");
 			$("<h4>").text(g.name).appendTo(gContent);
 			if (g.description.length > 0) {
@@ -140,28 +144,37 @@ function ready() {
 			}
 			var emoji = categoryEmojis[g.category] || "&#x2753;";
 			var category = $("<p class='text-right'>").html(emoji).appendTo(gContent);
-			newCard(`garment-${g.id}`, "", gContent).appendTo(clothesBox);
+			var editBtn = $("<button type='button' class='btn btn-info editGarmentBtn'>").text("Edit").data("id", g.id).appendTo(gContent);
+			newCard(`garment-${g.id}`, "/assets/img/outfit.png", gContent).appendTo(clothesBox);
 
 			setTimeout(function(garmentID) {
-				$.ajax({
-					method: "GET",
-					url: "/api/clothes/img/" + garmentID,
-					beforeSend: setAccessTokenHeader(token)
-				})
-				.done(function(response) {
-					if (response.error) {
-						console.log(response.errorMsg);
-					} else {
-						$(`#garment-${garmentID}-img`).attr("src", response.image)
-					}
-				})
+				if (garments[garmentID].image.length < 1) {
+					$.ajax({
+						method: "GET",
+						url: "/api/clothes/img/" + garmentID,
+						beforeSend: setAccessTokenHeader(token)
+					})
+					.done(function(response) {
+						if (response.error) {
+							console.log(response.errorMsg);
+						} else {
+							if (response.image.length > 0) {
+								$(`#garment-${garmentID}-img`).attr("src", response.image);
+								garments[garmentID].image = response.image;
+							}
+						}
+					})
+				}
 			}, 0, g.id);
 		}
 	}
 
 	function resetModal() {
+		clothingTitle.val("");
+		clothingDescription.val("");
 		$("#item-closet").val(closetName);
 		$("#item-category").prop("selectedIndex", 0);
+		$("#editClothing").addClass("invisible");
 		showUploadImage();
 		if (fileInput[0].files.length > 0) {
 			$("#uploadImgBox").removeClass("invisible");
@@ -170,9 +183,27 @@ function ready() {
 		}
 	}
 
-	$("#addGarmentBtn").click(function() {
+	$(document).on("click", "#addGarmentBtn", function() {
 		resetModal();
+		$("#modalTitle").text("Add a Garment");
+		$("#submitClothing").removeClass("invisible");
+		$("#clothingModal").modal("show");
 	});
+
+	$(document).on("click", ".editGarmentBtn", function(e) {
+		resetModal();
+		var btn = $(e.target);
+		var g = garments[btn.data("id")];
+		modalTitle.text("Edit Garment");
+		clothingTitle.val(g.name);
+		clothingDescription.val(g.description);
+		closetType.val(g.closet);
+		clothingCategory.val(g.category);
+		$("#submitClothing").addClass("invisible");
+		$("#editClothing").removeClass("invisible");
+		$("#deleteClothing").data("id", g.id);
+		$("#clothingModal").modal("show");
+	})
 
 	fileInput.change(showUploadImage);
 
@@ -244,12 +275,13 @@ function ready() {
 		$("#uploadImgBox").addClass("invisible");
 	})
 
-	$("#submitClothing").click(function() {
+	$("#submitClothing button").click(function() {
 		var newGarment = {
 			name: clothingTitle.val().trim(),
 			description: clothingDescription.val().trim(),
 			category: clothingCategory.val().trim().toLowerCase(),
-			closet: closetType.val().trim().toLowerCase()
+			closet: closetType.val().trim().toLowerCase(),
+			image: ""
 		}
 
 		clothingTitle.removeClass("is-invalid");
@@ -272,6 +304,8 @@ function ready() {
 			newGarment.image = imgData;
 		}
 
+		console.log(newGarment)
+
 		$.ajax({
 			method: "POST",
 			url: "/api/clothes",
@@ -288,6 +322,27 @@ function ready() {
 		})
 	})
 
+	$("#deleteClothing").click(function() {
+		var garmentID = $(this).data("id");
+		$.ajax({
+			method: "DELETE",
+			url: "/api/clothes",
+			beforeSend: setAccessTokenHeader(token),
+			data: {
+				id: garmentID
+			}
+		})
+		.done(function(response) {
+			if (response.error) {
+				console.log(response.errorMsg);
+			} else {
+				delete garments[garmentID];
+				drawCards();
+				$("#clothingModal").modal("hide");
+			}
+		})
+	})
+
 	function getClothes() {
 		$.ajax({
 			method: "GET",
@@ -298,7 +353,9 @@ function ready() {
 			if (response.error) {
 				console.log(response.errorMsg);
 			} else {
-				garments = response.garments;
+				response.garments.forEach(function(g) {
+					garments[g.id] = g;
+				});
 				drawCards();
 			}
 		})
