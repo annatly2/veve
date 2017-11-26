@@ -164,11 +164,60 @@ module.exports = function(app) {
 
       Garment.findAll(query)
         .then(function(garments) {
-          // TODO: decrypt garment images AND/OR make separate API call
+          garments = garments.map(function(g) {
+            return {
+              id: g.id,
+              name: g.name,
+              description: g.description,
+              category: g.category,
+              closet: g.closet
+            }
+          })
           res.json({
             error: false,
             garments: garments
           });
+        })
+        .catch(function(err) {
+          res.json({
+            error: true,
+            errorMsg: err.message
+          });
+        })
+    }
+  );
+
+  router.get("/clothes/img/:id",
+    jwtauth,
+    forbiddenIfNoUser,
+    function(req, res) {
+      var query = {
+        where: {
+          UserId: req.user.dataValues.id,
+          id: req.params.id
+        }
+      };
+
+      Garment.findAll(query)
+        .then(function(garments) {
+          if (garments.length !== 1) {
+            res.json({
+              error: true,
+              errorMsg: `item with id ${req.params.id} not found`
+            })
+          } else {
+            cu.decrypt(garments[0].dataValues.image, req.user.dataValues.salt)
+              .then(function(plaintext) {
+                res.json({
+                  error: false,
+                  id: req.params.id,
+                  image: plaintext
+                })
+              })
+              .catch(function(err) {
+                throw err
+              })
+          }
         })
         .catch(function(err) {
           res.json({
@@ -185,21 +234,30 @@ module.exports = function(app) {
     function(req, res) {
       var garment = req.body;
       garment.UserId = req.user.id;
-      // TODO: encrypt garment.image
+      cu.encrypt(garment.image, req.user.salt)
+        .then(function(ciphertext) {
+          garment.image = ciphertext;
 
-      Garment.create(garment)
-      .then(function(dbGarment){
-        res.json({
-          error: false,
-          garment: dbGarment
-        });
-      })
-      .catch(function(err) {
-        res.json({
-          error: true,
-          errorMsg: err.message
-        });
-      });
+          Garment.create(garment)
+            .then(function(g){
+              res.json({
+                error: false,
+                garment: {
+                  id: g.id,
+                  name: g.name,
+                  description: g.description,
+                  category: g.category,
+                  closet: g.closet
+                }
+              });
+            })
+            .catch(function(err) {
+              res.json({
+                error: true,
+                errorMsg: err.message
+              });
+            });
+        })
     }
   );
 
