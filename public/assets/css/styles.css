@@ -68,6 +68,13 @@ footer .container a:not(:first-child) {
 	max-height: 300px;
 }
 
+
+/* Carousel */
+#carouselExampleIndicators{
+	max-width: 510px;
+	margin: 0 auto;
+}
+
 @media only screen and (min-width: 768px) {
 	/* For desktop: */
 	.closet-icon,
