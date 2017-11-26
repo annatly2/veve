@@ -35,5 +35,10 @@ module.exports = function() {
     });
   });
 
+ 
+  router.get("/test", function(req, res) {
+    res.render("test", {layout: "main"});
+  });
+
   return router;
 }

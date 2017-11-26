@@ -32,6 +32,7 @@ footer .container a:not(:first-child) {
 
 .closet-icon,
 .outfit-icon,
+#outfit-icon,
 #addIcon {
 	height: 192px;
 	width: 192px;
@@ -50,7 +51,9 @@ footer .container a:not(:first-child) {
 	margin: 0 0.15rem 0 0.15rem;
 }
 
-.bg-info, .btn-info {
+
+
+.bg-info {
 	transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 	background: #00a1bf;
 	background: -moz-linear-gradient(left, rgba(0, 161, 191, 1) 0%, rgba(0, 202, 221, 1) 100%);
@@ -67,6 +70,7 @@ footer .container a:not(:first-child) {
 	/* For desktop: */
 	.closet-icon,
 	.outfit-icon,
+	#outfit-icon,
 	#addClothesCard-img {
 		height: 256px;
 		width: 256px;

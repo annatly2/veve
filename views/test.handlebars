@@ -1,0 +1,26 @@
+<button id="test" type="submit">Test Button</button>
+
+
+
+<script type="text/javascript">
+function ready() {
+
+$('#test').click(function() {
+
+var queryUrl = "api/token";
+
+  $.ajax({
+    url: queryUrl,
+    method: "GET"
+  })
+  .done (function(response){
+    console.log(response);
+  });
+
+});
+   
+//ready function closer
+};//ready function closer
+//ready function closer
+
+</script>
