@@ -70,11 +70,12 @@
 									</div>
 							</div>
 							<div class="form-group row m-2">
-									<div class="col-12 text-center">
-											<button type="button" class="btn btn-info mt-4" id="submitClothing">Add Clothing</button>
+									<div class="col-12 text-center" id="submitClothing">
+											<button type="button" class="btn btn-info mt-4">Add Clothing</button>
 									</div>
-									<div class="col-12 text-center" id="deleteClothing">
-										<button type="button" class="btn btn-danger mt-4">Delete Clothing</button>
+									<div class="col-12 text-center" id="editClothing">
+										<button type="button" class="btn btn-info mt-4" id="updateClothing">Update Clothing</button>
+										<button type="button" class="btn btn-danger mt-4" id="deleteClothing">Delete Clothing</button>
 									</div>
 							</div>
 					</form>
@@ -144,21 +145,26 @@ function ready() {
 			var emoji = categoryEmojis[g.category] || "&#x2753;";
 			var category = $("<p class='text-right'>").html(emoji).appendTo(gContent);
 			var editBtn = $("<button type='button' class='btn btn-info editGarmentBtn'>").text("Edit").data("id", g.id).appendTo(gContent);
-			newCard(`garment-${g.id}`, "", gContent).appendTo(clothesBox);
+			newCard(`garment-${g.id}`, "/assets/img/outfit.png", gContent).appendTo(clothesBox);
 
 			setTimeout(function(garmentID) {
-				$.ajax({
-					method: "GET",
-					url: "/api/clothes/img/" + garmentID,
-					beforeSend: setAccessTokenHeader(token)
-				})
-				.done(function(response) {
-					if (response.error) {
-						console.log(response.errorMsg);
-					} else {
-						$(`#garment-${garmentID}-img`).attr("src", response.image);
-					}
-				})
+				if (garments[garmentID].image.length < 1) {
+					$.ajax({
+						method: "GET",
+						url: "/api/clothes/img/" + garmentID,
+						beforeSend: setAccessTokenHeader(token)
+					})
+					.done(function(response) {
+						if (response.error) {
+							console.log(response.errorMsg);
+						} else {
+							if (response.image.length > 0) {
+								$(`#garment-${garmentID}-img`).attr("src", response.image);
+								garments[garmentID].image = response.image;
+							}
+						}
+					})
+				}
 			}, 0, g.id);
 		}
 	}
@@ -168,7 +174,7 @@ function ready() {
 		clothingDescription.val("");
 		$("#item-closet").val(closetName);
 		$("#item-category").prop("selectedIndex", 0);
-		$("#deleteClothing").addClass("invisible");
+		$("#editClothing").addClass("invisible");
 		showUploadImage();
 		if (fileInput[0].files.length > 0) {
 			$("#uploadImgBox").removeClass("invisible");
@@ -180,7 +186,8 @@ function ready() {
 	$(document).on("click", "#addGarmentBtn", function() {
 		resetModal();
 		$("#modalTitle").text("Add a Garment");
-		$("#clothingModal").modal();
+		$("#submitClothing").removeClass("invisible");
+		$("#clothingModal").modal("show");
 	});
 
 	$(document).on("click", ".editGarmentBtn", function(e) {
@@ -192,9 +199,10 @@ function ready() {
 		clothingDescription.val(g.description);
 		closetType.val(g.closet);
 		clothingCategory.val(g.category);
-		$("#deleteClothing").removeClass("invisible");
-		$("#deleteClothing button").data("id", g.id);
-		$("#clothingModal").modal();
+		$("#submitClothing").addClass("invisible");
+		$("#editClothing").removeClass("invisible");
+		$("#deleteClothing").data("id", g.id);
+		$("#clothingModal").modal("show");
 	})
 
 	fileInput.change(showUploadImage);
@@ -267,7 +275,7 @@ function ready() {
 		$("#uploadImgBox").addClass("invisible");
 	})
 
-	$("#submitClothing").click(function() {
+	$("#submitClothing button").click(function() {
 		var newGarment = {
 			name: clothingTitle.val().trim(),
 			description: clothingDescription.val().trim(),
@@ -314,7 +322,7 @@ function ready() {
 		})
 	})
 
-	$("#deleteClothing button").click(function() {
+	$("#deleteClothing").click(function() {
 		var garmentID = $(this).data("id");
 		$.ajax({
 			method: "DELETE",
@@ -325,7 +333,13 @@ function ready() {
 			}
 		})
 		.done(function(response) {
-			console.log(response);
+			if (response.error) {
+				console.log(response.errorMsg);
+			} else {
+				delete garments[garmentID];
+				drawCards();
+				$("#clothingModal").modal("hide");
+			}
 		})
 	})
 
