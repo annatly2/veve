@@ -44,7 +44,7 @@ footer .container a:not(:first-child) {
 	width: 192px;
 }
 
-#apiCardImg {
+.shopstyleCardImg {
 	max-height: 192px;
 	max-width: 192px;
 }
@@ -86,7 +86,7 @@ footer .container a:not(:first-child) {
 		width: 256px;
 	}
 
-	#apiCardImg {
+	.shopstyleCardImg {
 		max-height: 256px;
 		max-width: 256px;
 	}
