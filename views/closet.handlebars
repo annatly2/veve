@@ -159,11 +159,15 @@ function ready() {
 							console.log(response.errorMsg);
 						} else {
 							if (response.image.length > 0) {
-								$(`#garment-${garmentID}-img`).attr("src", response.image);
+								var imgEl = $(`#garment-${garmentID}-img`);
+								imgEl.attr("src", response.image);
+								imgEl.data("hash", hashString(response.image));
 								garments[garmentID].image = response.image;
 							}
 						}
 					})
+				} else {
+					$(`#garment-${garmentID}-img`).attr("src", garments[garmentID].image);
 				}
 			}, 0, g.id);
 		}
@@ -193,14 +197,22 @@ function ready() {
 	$(document).on("click", ".editGarmentBtn", function(e) {
 		resetModal();
 		var btn = $(e.target);
-		var g = garments[btn.data("id")];
+		var garmentID = btn.data("id");
+		var g = garments[garmentID];
 		modalTitle.text("Edit Garment");
 		clothingTitle.val(g.name);
 		clothingDescription.val(g.description);
 		closetType.val(g.closet);
 		clothingCategory.val(g.category);
+		$("#uploadImg").data("updated", false);
+		var img = $(`#garment-${garmentID}-img`);
+		if (img.data("hash") !== undefined) {
+			$("#uploadImg").attr("src", img.attr("src"));
+			$("#uploadImgBox").removeClass("invisible");
+		}
 		$("#submitClothing").addClass("invisible");
 		$("#editClothing").removeClass("invisible");
+		$("#updateClothing").data("id", g.id);
 		$("#deleteClothing").data("id", g.id);
 		$("#clothingModal").modal("show");
 	})
@@ -246,6 +258,8 @@ function ready() {
 					var scaledData = canvas.toDataURL("image/png");
 					$("#uploadImg").attr("src", scaledData);
 					$("#uploadImgBox").removeClass("invisible");
+					$("#uploadImg").data("deleted", false);
+					$("#uploadImg").data("updated", true);
 				}
 				srcImg.src = data;
 			}
@@ -257,6 +271,7 @@ function ready() {
 
 	$("#imgRotate").click(function() {
 		if ($("#uploadImg").attr("src").length > 0) {
+			$("#uploadImg").data("updated", true);
 			var srcImg = $("#uploadImg")[0];
 			var canvas = document.createElement("canvas");
 			canvas.width = srcImg.naturalHeight;
@@ -272,10 +287,11 @@ function ready() {
 	$("#imgDelete").click(function() {
 		fileInput[0].value = "";
 		$("#uploadImg").attr("src", "");
+		$("#uploadImg").data("deleted", true);
 		$("#uploadImgBox").addClass("invisible");
 	})
 
-	$("#submitClothing button").click(function() {
+	function getModalInput() {
 		var newGarment = {
 			name: clothingTitle.val().trim(),
 			description: clothingDescription.val().trim(),
@@ -304,7 +320,11 @@ function ready() {
 			newGarment.image = imgData;
 		}
 
-		console.log(newGarment)
+		return newGarment;
+	}
+
+	$("#submitClothing button").click(function() {
+		var newGarment = getModalInput();
 
 		$.ajax({
 			method: "POST",
@@ -313,12 +333,68 @@ function ready() {
 			beforeSend: setAccessTokenHeader(token)
 		})
 		.done(function(response) {
-			console.log(response);
 			window.location = "/closet/" + newGarment.closet;
 		})
 		.fail(function(err) {
 			console.log(err);
 			alert("Unable to upload image");
+		})
+	})
+
+	function hashString(str) {
+		// https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery
+		// esmiralha
+		var hash = 0;
+		var char;
+		try {
+			if (str.length < 1) return 0;
+			for (var i = 0; i < str.length; i++) {
+				char = str.charCodeAt(i);
+				hash = ((hash << 5) - hash) + char;
+				hash |= 0;
+			}
+		} catch(err) {
+			return 0;
+		}
+		return hash;
+	}
+
+	$("#updateClothing").click(function() {
+		var garmentID = $(this).data("id");
+		var garment = getModalInput();
+		garment.id = garmentID;
+		if ($("#uploadImg").data("updated") === false) {
+			delete garment["image"];
+		}
+		if ($("#uploadImg").data("deleted")) {
+			garment.image = "";
+		}
+
+		$.ajax({
+			method: "PUT",
+			url: "/api/clothes",
+			beforeSend: setAccessTokenHeader(token),
+			data: garment
+		})
+		.done(function(response) {
+			if (garment.image === undefined) {
+				if (garments[garmentID] && garments[garmentID].image) {
+					garment.image = garments[garmentID].image;
+				}
+			}
+			garments[garmentID] = garment;
+			drawCards();
+			var g = garments[garmentID];
+			if (g.image !== undefined) {
+				$(`#garment-${garmentID}-img`).data("hash", hashString(g.image));
+			}
+			$("#clothingModal").modal("hide");
+			if (garment.closet !== closetName) {
+				window.location = "/closet/" + garment.closet;
+			}
+		})
+		.fail(function(err) {
+			console.log(err);
 		})
 	})
 
@@ -354,6 +430,7 @@ function ready() {
 				console.log(response.errorMsg);
 			} else {
 				response.garments.forEach(function(g) {
+					g.image = g.image || "";
 					garments[g.id] = g;
 				});
 				drawCards();
