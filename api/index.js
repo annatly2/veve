@@ -195,7 +195,8 @@ module.exports = function(app) {
         where: {
           UserId: req.user.dataValues.id,
           id: req.params.id
-        }
+        },
+        attributes: ["image"]
       };
 
       Garment.findAll(query)
@@ -215,7 +216,10 @@ module.exports = function(app) {
                 })
               })
               .catch(function(err) {
-                throw err
+                res.json({
+                  error: true,
+                  errorMsg: err.message
+                })
               })
           }
         })
@@ -237,27 +241,31 @@ module.exports = function(app) {
       cu.encrypt(garment.image, req.user.salt)
         .then(function(ciphertext) {
           garment.image = ciphertext;
-
-          Garment.create(garment)
-            .then(function(g){
-              res.json({
-                error: false,
-                garment: {
-                  id: g.id,
-                  name: g.name,
-                  description: g.description,
-                  category: g.category,
-                  closet: g.closet
-                }
-              });
-            })
-            .catch(function(err) {
-              res.json({
-                error: true,
-                errorMsg: err.message
-              });
-            });
         })
+        .catch(function(err) {
+          console.log(err);
+        })
+        .then(function() {
+          return Garment.create(garment);
+        })
+        .then(function(g){
+          res.json({
+            error: false,
+            garment: {
+              id: g.id,
+              name: g.name,
+              description: g.description,
+              category: g.category,
+              closet: g.closet
+            }
+          });
+        })
+        .catch(function(err) {
+          res.json({
+            error: true,
+            errorMsg: err.message
+          });
+        });
     }
   );
 
@@ -266,12 +274,21 @@ module.exports = function(app) {
     forbiddenIfNoUser,
     function(req, res) {
       var garment = req.body;
-
-      Garment.update(garment, {
-          where: {
-            UserId: req.user.id,
-            id: garment.id
-          }
+      garment.UserId = req.user.id;
+      cu.encrypt(garment.image, req.user.salt)
+        .then(function(ciphertext) {
+          garment.image = ciphertext;
+        })
+        .catch(function(err) {
+          console.log(err);
+        })
+        .then(function() {
+          return Garment.update(garment, {
+            where: {
+              UserId: req.user.id,
+              id: garment.id
+            }
+          })
         })
         .then(function(updateCount) {
           updateCount = updateCount[0];
