@@ -237,27 +237,31 @@ module.exports = function(app) {
       cu.encrypt(garment.image, req.user.salt)
         .then(function(ciphertext) {
           garment.image = ciphertext;
-
-          Garment.create(garment)
-            .then(function(g){
-              res.json({
-                error: false,
-                garment: {
-                  id: g.id,
-                  name: g.name,
-                  description: g.description,
-                  category: g.category,
-                  closet: g.closet
-                }
-              });
-            })
-            .catch(function(err) {
-              res.json({
-                error: true,
-                errorMsg: err.message
-              });
-            });
         })
+        .catch(function(err) {
+          console.log(err);
+        })
+        .then(function() {
+          return Garment.create(garment);
+        })
+        .then(function(g){
+          res.json({
+            error: false,
+            garment: {
+              id: g.id,
+              name: g.name,
+              description: g.description,
+              category: g.category,
+              closet: g.closet
+            }
+          });
+        })
+        .catch(function(err) {
+          res.json({
+            error: true,
+            errorMsg: err.message
+          });
+        });
     }
   );
 
