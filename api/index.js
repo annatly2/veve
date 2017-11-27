@@ -195,7 +195,8 @@ module.exports = function(app) {
         where: {
           UserId: req.user.dataValues.id,
           id: req.params.id
-        }
+        },
+        attributes: ["image"]
       };
 
       Garment.findAll(query)
@@ -215,7 +216,10 @@ module.exports = function(app) {
                 })
               })
               .catch(function(err) {
-                throw err
+                res.json({
+                  error: true,
+                  errorMsg: err.message
+                })
               })
           }
         })
