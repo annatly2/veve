@@ -27,10 +27,16 @@ module.exports = function() {
   // Private Pages
 
   router.get("/profile", function(req, res) {
+    res.locals.metaTags = {
+      title: "Your Profile"
+    };
     res.render("profile", {layout: "main"});
   });
 
   router.get("/outfits", function(req, res) {
+    res.locals.metaTags = {
+      title: "Outfits"
+    };
     res.render("outfits", {layout: "main"});
   });
 
