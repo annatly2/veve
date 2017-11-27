@@ -14,10 +14,6 @@ module.exports = function() {
     res.render("signup", {layout: "landing"});
   });
 
-  router.get("/test", function(req, res) {
-    res.render("test", {layout: "main"});
-  });
-
   router.get("/profile", function(req, res) {
     res.render("profile", {layout: "main"});
   });

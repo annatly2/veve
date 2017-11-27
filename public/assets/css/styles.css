@@ -38,6 +38,11 @@ footer .container a:not(:first-child) {
 	width: 192px;
 }
 
+#apiCardImg {
+	max-height: 192px;
+	max-width: 192px;
+}
+
 .garment-image {
 	max-width: 192px;
 }
@@ -73,6 +78,11 @@ footer .container a:not(:first-child) {
 	#addClothesCard-img {
 		height: 256px;
 		width: 256px;
+	}
+
+	#apiCardImg {
+		max-height: 256px;
+		max-width: 256px;
 	}
 
 	.garment-image {

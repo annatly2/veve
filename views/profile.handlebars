@@ -1,59 +1,4 @@
 <div class="container">
-<<<<<<< HEAD
-        <h1>Hello <span id="displayNameSpan"></span>! </h1>
-        <br>
-        <form id="loginForm">
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label" for="email">Email</label>
-                <div class="col-sm-10">
-                    <input name="email" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label" for="password">Password</label>
-                <div class="col-sm-10">
-                    <input name="password" type="password" class="form-control" placeholder="Password">
-                </div>
-            </div>
-
-            <div class="form-group row text-center">
-                <div class="col">
-                    <!-- <button id="loginButton" type="submit" class="btn btn-info">Login</button> -->
-                    <a href="/signup" class="btn btn-info">Edit information</a>
-                </div>
-            </div>
-        </form>
-</div>
-
-<script type="text/javascript">
-
-function ready() {
-  automaticTokenCheck();
-	var token = getLocalAccessToken();
-
-$('#test').click(function() {
-
-var queryUrl = "/api/username";
-
-  $.ajax({
-    url: queryUrl,
-    method: "GET",
-    beforeSend: setAccessTokenHeader(token)
-  })
-  .done (function(response){
-    console.log(response.username);
-    var info = response.username;
-    $("#filler").append(username);
-  });
-
-});
-   
-//ready function closer
-};//ready function closer
-//ready function closer
-
-=======
    <h1><span id="usernameSpan"></span>'s Profile Page</h1>
 
 </div>
@@ -84,5 +29,4 @@ var queryUrl = "/api/username";
    };//ready function closer
    //ready function closer
    
->>>>>>> 2b9af8821afc7779aa9d24bb3b1979bcbb303c45
 </script>
