@@ -266,12 +266,21 @@ module.exports = function(app) {
     forbiddenIfNoUser,
     function(req, res) {
       var garment = req.body;
-
-      Garment.update(garment, {
-          where: {
-            UserId: req.user.id,
-            id: garment.id
-          }
+      garment.UserId = req.user.id;
+      cu.encrypt(garment.image, req.user.salt)
+        .then(function(ciphertext) {
+          garment.image = ciphertext;
+        })
+        .catch(function(err) {
+          console.log(err);
+        })
+        .then(function() {
+          return Garment.update(garment, {
+            where: {
+              UserId: req.user.id,
+              id: garment.id
+            }
+          })
         })
         .then(function(updateCount) {
           updateCount = updateCount[0];
