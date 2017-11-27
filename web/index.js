@@ -14,6 +14,19 @@ module.exports = function() {
     res.render("signup", {layout: "landing"});
   });
 
+  router.get("/test", function(req, res) {
+    res.render("test", {layout: "main"});
+  });
+
+  router.get("/profile", function(req, res) {
+    res.render("profile", {layout: "main"});
+  });
+
+  router.get("/outfits", function(req, res) {
+    res.render("outfits", {layout: "main"});
+  });
+
+
   router.get("/closets", function(req, res) {
     res.locals.metaTags = {
       title: "Closets"
@@ -40,4 +53,4 @@ module.exports = function() {
   });
 
   return router;
-}
+};

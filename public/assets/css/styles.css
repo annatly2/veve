@@ -32,6 +32,7 @@ footer .container a:not(:first-child) {
 
 .closet-icon,
 .outfit-icon,
+#outfit-icon,
 #addIcon {
 	height: 192px;
 	width: 192px;
@@ -50,10 +51,6 @@ footer .container a:not(:first-child) {
 	margin: 0 0.15rem 0 0.15rem;
 }
 
-.btn-info,
-.nav-link.active {
-	background: rgba(0, 202, 221, 1);
-}
 
 .bg-info {
 	transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -68,17 +65,11 @@ footer .container a:not(:first-child) {
 	max-height: 300px;
 }
 
-
-/* Carousel */
-#carouselExampleIndicators{
-	max-width: 510px;
-	margin: 0 auto;
-}
-
 @media only screen and (min-width: 768px) {
 	/* For desktop: */
 	.closet-icon,
 	.outfit-icon,
+	#outfit-icon,
 	#addClothesCard-img {
 		height: 256px;
 		width: 256px;

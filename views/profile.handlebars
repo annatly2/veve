@@ -1,4 +1,5 @@
 <div class="container">
+<<<<<<< HEAD
         <h1>Hello <span id="displayNameSpan"></span>! </h1>
         <br>
         <form id="loginForm">
@@ -52,4 +53,36 @@ var queryUrl = "/api/username";
 };//ready function closer
 //ready function closer
 
+=======
+   <h1><span id="usernameSpan"></span>'s Profile Page</h1>
+
+</div>
+<script type="text/javascript">
+   function ready() {
+      automaticTokenCheck();
+      var token = getLocalAccessToken();
+   
+   $('#test').ready(function() {
+         
+      $.ajax({
+      url: "/api/username",
+      method: "GET",
+      beforeSend: setAccessTokenHeader(token)
+      })
+      .done (function(response){
+      console.log(response.username);
+      var username = (response.username);
+      $('#usernameSpan').append(username);
+      });
+   
+   });
+   
+   
+   
+      
+   //ready function closer
+   };//ready function closer
+   //ready function closer
+   
+>>>>>>> 2b9af8821afc7779aa9d24bb3b1979bcbb303c45
 </script>
