@@ -1,20 +1,25 @@
-<div class="container" id="apiContainer">
-    <div class="row justify-content-center" id="outfitRow">
+<div class="container" id="apiBtnContainer">
+    <div class="row justify-content-center" id="apiBtnRow">
+        <button type="button" class="btn btn-info">New Suggestions</button>
+    </div>
+</div>
+
+<div class="container" id="apiContainerOne">
+    <div class="row justify-content-center" id="outfitRowOne">
         <div class="col-xs-2 m-1">
-            <div class="card" id="addClothesButton">
+            {{!-- <div class="card" id="addClothesButton">
                 <div class="card-body text-center">
                     <img class="card-img-top img-fluid" id="outfit-icon" src="#" alt="outfit image">
                     <div class="col-xs-2 mt-2">
                         <button type="button" class="btn btn-info mt-3" id="addOutfitButton">Add New Outfit</button>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
-
     </div>
 </div>
 
-
+{{!-- 
 <!-- Add Clothing Modal -->
 <div class="modal fade bd-modal-lg" id="clothingModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -67,18 +72,14 @@
                         <div class="col-12 text-center">
                             <!-- This button will activate the add clothing modal WITHOUT JavaScript -->
                             <!-- <button type="button btn-info" class="btn btn-info mt-4" data-toggle="modal" data-target="#successModal">Add Clothing</button> -->
-                            
                             <!-- This button will activate the add clothing modal WITH JavaScript -->
                             <button type="button" class="btn btn-info mt-4" id="submitClothing">Add Clothing</button>
                         </div>
                     </div>
                 </form>
             </div>
-
-
           </div>
         </div>
-
         <!--Clothing Modal closer -->
       </div>
 
@@ -102,18 +103,14 @@
                         <div class="col-12 text-center">
                             <!-- This button will activate the add clothing modal WITHOUT JavaScript -->
                             <!-- <button type="button btn-info" class="btn btn-info mt-4" data-toggle="modal" data-target="#successModal">Add Clothing</button> -->
-                            
                             <!-- This button will activate the add closet modal WITH JavaScript -->
                             <button type="button" class="btn btn-info mt-4" id="submitOutfit">Add Outfit</button>
                         </div>
                     </div>
                 </form>
             </div>
-
-
           </div>
         </div>
-
         <!--Outfit Modal closer -->
       </div>
     
@@ -144,7 +141,7 @@
           </div>
         </div>
         <!--Closet Modal closer -->
-</div>
+</div> --}}
 
 <script>
 function ready() {
@@ -229,25 +226,23 @@ $.ajax({
 .done(function(response) {
    console.log(response);
 
-   var container = $('#apiContainer');
-   var row = $('#apiCardRow').appendTo(container);
+   var container = $('#apiContainerOne');
+   var row = $('#apiCardRowOne').appendTo(container);
    var col = $("<div class='col-xs-2 m-1'>").appendTo(row);
    var card = $("<div class='card' id='apiCard'>").appendTo(col);
    var cardBody = $("<div class='card-body text-center'>").appendTo(card);
 
-  
-
-   var outfitRow = $('#outfitRow');
-   for(var j = 0; j < response.products.length; j++) {
-      var col = $("<div class='col-xs-2 m-1'>").appendTo(outfitRow);
-      var card = $("<div class='card' id='apiCard'>").appendTo(col);
-      var cardBody = $("<div class='card-body text-center'>").appendTo(card);
-      var cardImage = $(`<img class='card-img-top' id='apiCardImg' src='${response.products[i].image.sizes.XLarge.url}' alt='api image'>`).appendTo(cardBody);
-      var endCard = $(cardImage.append('#apiContainer'));
-   }
+   var outfitRow = $('#outfitRowOne');
+        for(var i = 0; i < response.products.length; i++) {
+            
+            var col = $("<div class='col-xs-2 m-1'>").appendTo(outfitRow);
+            var card = $("<div class='card' id='apiCard'>").appendTo(col);
+            var cardBody = $("<div class='card-body text-center'>").appendTo(card);
+            var cardImage = $(`<img class='card-img-top' id='apiCardImg' src='${response.products[i].image.sizes.XLarge.url}' alt='api image'>`).appendTo(cardBody);
+            var cardURL = $('<button type='button' class='btn btn-info mt-4' id='outfitUrl' src='${response.products[i].clickUrl}'></button>').appendTo(cardImage);
+            var endCard = $(cardImage.append('#apiContainer'));
+        }
 });
-
-
 
 $.ajax({
    url: "http://api.shopstyle.com/api/v2/products?pid=" + apiKey + "&fts=mens%20clothing",
@@ -255,6 +250,12 @@ $.ajax({
 })
 .done (function(response1) {
    console.log(response1)
+});
+
+$(document).ready(function(){
+    $("button").click(function(){
+        location.reload(true);
+    });
 });
 
 }
