@@ -1,60 +1,15 @@
- <div class="jumbotron jumbotron-fluid bg-info text-white">
-        <div class="container text-center">
-            <h1 class="display-3"><span class="closet-name">___</span>Outfits</h1>
-        </div>
-
-        <div class="row">
-            <div class="col text-center">
-                <ul class="nav nav-tabs justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/profile">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/closets">Closets</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white active bg-info" href="/outfits">Outfits</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="upload.html">Upload</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <ul class="nav nav-pills nav-fill">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Add Clothes</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-<div class="container">
+<div class="container" id="apiContainer">
     <div class="row justify-content-center" id="outfitRow">
         <div class="col-xs-2 m-1">
             <div class="card" id="addClothesButton">
                 <div class="card-body text-center">
-                    <img class="card-img-top img-fluid" id="outfit-icon" src="../public/assets/img/outfit-icon.png" alt="outfit image">
+                    <img class="card-img-top img-fluid" id="outfit-icon" src="#" alt="outfit image">
                     <div class="col-xs-2 mt-2">
                         <button type="button" class="btn btn-info mt-3" id="addOutfitButton">Add New Outfit</button>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- <div class="col-xs-2 m-1">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <img class="card-img-top img-fluid" id="outfit-icon" src="../assets/img/plus.png" alt="outfit image">
-                        <h4 class="card-title">Outfit 1</h4>
-                        <a href="#" class="btn btn-info">View</a>
-                        <a href="#" class="btn btn-info">Delete</a>
-                    </div>
-                </div>
-            </div> -->
 
     </div>
 </div>
@@ -192,6 +147,8 @@
 </div>
 
 <script>
+function ready() {
+
 var token = getLocalAccessToken();
 var fileInput = $("#selectFile");
 var clothingTitle = $("#item-name");
@@ -259,4 +216,46 @@ $(document).on('click', '#viewOutfit', function(e){
     window.location.href="currentoutfit.html";
 });
     
+
+//ajax call to shopstyle collective for outfit suggestions
+//=========================================================================
+var apiKey = "uid9401-40128451-70";
+var randomOffset = Math.floor(Math.random() * 5000) + 1;
+
+$.ajax({
+   url: "http://api.shopstyle.com/api/v2/products?pid=" + apiKey + "&cat=womens%20clothes&offset="+ randomOffset + "&limit=8",
+   method: "GET",
+})
+.done(function(response) {
+   console.log(response);
+
+   var container = $('#apiContainer');
+   var row = $('#apiCardRow').appendTo(container);
+   var col = $("<div class='col-xs-2 m-1'>").appendTo(row);
+   var card = $("<div class='card' id='apiCard'>").appendTo(col);
+   var cardBody = $("<div class='card-body text-center'>").appendTo(card);
+
+  
+
+   var outfitRow = $('#outfitRow');
+   for(var j = 0; j < response.products.length; j++) {
+      var col = $("<div class='col-xs-2 m-1'>").appendTo(outfitRow);
+      var card = $("<div class='card' id='apiCard'>").appendTo(col);
+      var cardBody = $("<div class='card-body text-center'>").appendTo(card);
+      var cardImage = $(`<img class='card-img-top' id='apiCardImg' src='${response.products[i].image.sizes.XLarge.url}' alt='api image'>`).appendTo(cardBody);
+      var endCard = $(cardImage.append('#apiContainer'));
+   }
+});
+
+
+
+$.ajax({
+   url: "http://api.shopstyle.com/api/v2/products?pid=" + apiKey + "&fts=mens%20clothing",
+   method: "GET"
+})
+.done (function(response1) {
+   console.log(response1)
+});
+
+}
 </script> 
