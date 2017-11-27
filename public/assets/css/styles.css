@@ -24,6 +24,12 @@ footer .container a:not(:first-child) {
 	border-left: 1px solid white;
 }
 
+/* Carousel */
+#carouselExampleIndicators{
+	max-width: 510px;
+	margin: 0 auto;
+}
+
 /* Closets */
 
 #addClothesCard {
