@@ -1,32 +1,22 @@
 <div class="container">
-   <h1><span id="usernameSpan"></span>'s Profile Page</h1>
+  <h1><span id="usernameSpan"></span>'s Profile Page</h1>
 
 </div>
 <script type="text/javascript">
-   function ready() {
-      automaticTokenCheck();
-      var token = getLocalAccessToken();
-   
-   $('#test').ready(function() {
-         
-      $.ajax({
-      url: "/api/username",
-      method: "GET",
-      beforeSend: setAccessTokenHeader(token)
-      })
-      .done (function(response){
-      console.log(response.username);
-      var username = (response.username);
-      $('#usernameSpan').append(username);
-      });
-   
-   });
-   
-   
-   
-      
-   //ready function closer
-   };//ready function closer
-   //ready function closer
-   
+function ready() {
+  $("#profileTab").addClass("active bg-info");
+  automaticTokenCheck();
+  var token = getLocalAccessToken();
+
+  $.ajax({
+    url: "/api/username",
+    method: "GET",
+    beforeSend: setAccessTokenHeader(token)
+  })
+  .done (function(response){
+    console.log(response.username);
+    var username = (response.username);
+    $('#usernameSpan').append(username);
+  });
+}
 </script>
