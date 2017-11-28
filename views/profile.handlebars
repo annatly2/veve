@@ -259,7 +259,8 @@ function ready() {
       }
     })
     .done(function(response) {
-      window.location = "/";
+      window.localStorage.removeItem("saved_email");
+      signOut()
     })
     .fail(function(err) {
       console.log(err);
