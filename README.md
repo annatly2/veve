@@ -1,4 +1,4 @@
-# veve
+# VeVe
 
 ### Your Wardrobe...Reimagined
 
