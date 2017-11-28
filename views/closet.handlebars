@@ -138,12 +138,12 @@ function ready() {
 		for (var id in garments) {
 			var g = garments[id];
 			var gContent = $("<div class='mt-2'>");
-			$("<h4>").text(g.name).appendTo(gContent);
+      var emoji = categoryEmojis[g.category] || "&#x2753;";
+			var title = $("<h4>").text(g.name).appendTo(gContent);
+      var category = $("<p>").html(emoji).appendTo(gContent);
 			if (g.description.length > 0) {
 				$("<p class='text-left'>").text(g.description).appendTo(gContent);
 			}
-			var emoji = categoryEmojis[g.category] || "&#x2753;";
-			var category = $("<p class='text-right'>").html(emoji).appendTo(gContent);
 			var editBtn = $("<button type='button' class='btn btn-info editGarmentBtn'>").text("Edit").data("id", g.id).appendTo(gContent);
 			newCard(`garment-${g.id}`, "/assets/img/outfit.png", gContent).appendTo(clothesBox);
 
