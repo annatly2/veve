@@ -6,6 +6,8 @@ var clothingCategories = ["headwear", "tops", "dresses", "outerwear", "bottoms",
 module.exports = function() {
   var router = express.Router();
 
+  // Public Pages
+
   router.get("/", function(req, res) {
     res.render("login", {layout: "landing"});
   });
@@ -14,18 +16,29 @@ module.exports = function() {
     res.render("signup", {layout: "landing"});
   });
 
-  router.get("/test", function(req, res) {
-    res.render("test", {layout: "main"});
+  router.get("/privacy", function(req, res) {
+    res.render("privacy", {layout: "landing"});
   });
 
+  router.get("/about", function(req, res) {
+    res.render("about", {layout: "landing"});
+  });
+
+  // Private Pages
+
   router.get("/profile", function(req, res) {
+    res.locals.metaTags = {
+      title: "Your Profile"
+    };
     res.render("profile", {layout: "main"});
   });
 
   router.get("/outfits", function(req, res) {
+    res.locals.metaTags = {
+      title: "Outfits"
+    };
     res.render("outfits", {layout: "main"});
   });
-
 
   router.get("/closets", function(req, res) {
     res.locals.metaTags = {
@@ -46,10 +59,6 @@ module.exports = function() {
       closetTypes: closetTypes,
       clothingCategories: clothingCategories
     });
-  });
-
-  router.get("/privacy", function(req, res) {
-    res.render("privacy", {layout: "landing"});
   });
 
   return router;

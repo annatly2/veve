@@ -8,10 +8,29 @@
     <!-- Bootstrap 4.0.0-beta.2 CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" 
     integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+<!-- 
+   <link rel="stylesheet" type="text/css" href="../public/assets/css/style.css"> -->
    <title>VeVe</title>
 
+   <style> 
+   
+    #closet-icon {
+        height: 128px;
+        width: 128px;
+    }
 
+
+@media only screen and (min-width: 768px) {
+    /* For desktop: */
+    #closet-icon {
+        height: 256px;
+        width: 256px;    
+    }
+
+}
+
+   
+   </style>
 </head>
 <body>
     <div class="jumbotron jumbotron-fluid bg-info text-white">
@@ -36,12 +55,84 @@
         </div>
     </div>
 
+
+     <!--
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-xs-2 m-1">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img class="card-img-top img-fluid" id="closet-icon" src="assets/img/active.jpg" alt="card image caption">
+                    <h4 class="card-title">Active</h4>
+                    <p class="card-text">Wear to work</p>
+                    <a href="currentcloset.html" class="btn btn-info">Open</a>
+                    <a href="#" class="btn btn-info">Delete</a>
+                </div>
+            </div>
+        </div>
+       
+        <div class="col-xs-2 m-1">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img class="card-img-top img-fluid" id="closet-icon" src="assets/img/casual.jpg" alt="card image caption">
+                    <h4 class="card-title">Casual</h4>
+                    <a href="currentcloset.html" class="btn btn-info">Open</a>
+                    <a href="#" class="btn btn-info">Delete</a>
+                </div>
+            </div>
+    
+        </div>
+
+        <div class="col-xs-2 m-1">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img class="card-img-top img-fluid" id="closet-icon" src="assets/img/formal.jpg" alt="card image caption">
+                    <h4 class="card-title">Formal</h4>
+                    <a href="currentcloset.html" class="btn btn-info">Open</a>
+                    <a href="#" class="btn btn-info">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-xs-2 m-1">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img class="card-img-top img-fluid" id="closet-icon" src="assets/img/work.jpg" alt="card image caption">
+                    <h4 class="card-title">Work</h4>
+                    <a href="currentcloset.html" class="btn btn-info">Open</a>
+                    <a href="#" class="btn btn-info">Delete</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-2 m-1">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img class="card-img-top img-fluid" id="closet-icon" src="assets/img/other.jpg" alt="card image caption">
+                    <h4 class="card-title">Other</h4>
+                    <a href="currentcloset.html" class="btn btn-info">Open</a>
+                    <a href="#" class="btn btn-info">Delete</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+
+ 
+    </div>
+</div> -->
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-xs-2 m-1">
                     <div class="card">
                 <div class="card-body text-center">
-                    <img class="card-img-top img-fluid" id="closet-icon" src="../assets/img/active.jpg" alt="card image caption">
+                    <img class="card-img-top img-fluid" id="closet-icon" src="assets/img/active.jpg" alt="card image caption">
                     <h4 class="card-title">Active</h4>
                     <!-- <p class="card-text">Wear to work</p> -->
                     <a href="currentcloset.html" class="btn btn-info">Open</a>
@@ -53,7 +144,7 @@
         <div class="col-xs-2 m-1">
         <div class="card">
             <div class="card-body text-center">
-                <img class="card-img-top img-fluid" id="closet-icon" src="../assets/img/casual.jpg" alt="card image caption">
+                <img class="card-img-top img-fluid" id="closet-icon" src="assets/img/casual.jpg" alt="card image caption">
                 <h4 class="card-title">Casual</h4>
                 <a href="currentcloset.html" class="btn btn-info">Open</a>
                 <a href="#" class="btn btn-info">Delete</a>
@@ -64,7 +155,7 @@
         <div class="col-xs-2 m-1">
         <div class="card">
             <div class="card-body text-center">
-                <img class="card-img-top img-fluid" id="closet-icon" src="../assets/img/formal.jpg" alt="card image caption">
+                <img class="card-img-top img-fluid" id="closet-icon" src="assets/img/formal.jpg" alt="card image caption">
                 <h4 class="card-title">Formal</h4>
                 <a href="currentcloset.html" class="btn btn-info">Open</a>
                 <a href="#" class="btn btn-info">Delete</a>
@@ -75,7 +166,7 @@
         <div class="col-xs-2 m-1">
         <div class="card">
             <div class="card-body text-center">
-                <img class="card-img-top img-fluid" id="closet-icon" src="../assets/img/work.jpg" alt="card image caption">
+                <img class="card-img-top img-fluid" id="closet-icon" src="assets/img/work.jpg" alt="card image caption">
                 <h4 class="card-title">Work</h4>
                 <a href="currentcloset.html" class="btn btn-info">Open</a>
                 <a href="#" class="btn btn-info">Delete</a>
@@ -86,7 +177,7 @@
         <div class="col-xs-2 m-1">
         <div class="card">
             <div class="card-body text-center">
-                <img class="card-img-top img-fluid" id="closet-icon" src="../assets/img/other.jpg" alt="card image caption">
+                <img class="card-img-top img-fluid" id="closet-icon" src="assets/img/other.jpg" alt="card image caption">
                 <h4 class="card-title">Other</h4>
                 <a href="currentcloset.html" class="btn btn-info">Open</a>
                 <a href="#" class="btn btn-info">Delete</a>
