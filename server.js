@@ -10,7 +10,9 @@ var app = express();
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(bodyparser.json());
 
-app.set("jwtSecret", process.env.JWT_SECRET || "JWT_TESTING");
+var cu = require("./api/crypto_utils");
+var randomSecret = cu.hashSync(Date.now().toString());
+app.set("jwtSecret", process.env.JWT_SECRET || randomSecret);
 
 app.engine("handlebars", exphbs({defaultLayout: "main"}));
 app.set("view engine", "handlebars");
