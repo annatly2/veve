@@ -8,6 +8,16 @@ function setLocalAccessToken(token) {
   window.localStorage.setItem("access_token", token);
 }
 
+function getSavedEmail(email) {
+  var savedEmail = window.localStorage.getItem("saved_email");
+  if (savedEmail == undefined) return null;
+  return savedEmail;
+}
+
+function setSavedEmail(email) {
+  window.localStorage.setItem("saved_email", email);
+}
+
 function setAccessTokenHeader(token) {
   return function(xhr) {
     xhr.setRequestHeader("x-access-token", token);

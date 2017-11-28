@@ -66,6 +66,10 @@ function ready() {
   var signUpBtn = $("#signUpButton");
 
   automaticLogin(loginSuccessURL);
+  var savedEmail = getSavedEmail();
+  if (savedEmail !== null) {
+    emailField.val(savedEmail);
+  }
 
   loginBtn.click(function(e) {
     e.preventDefault();
@@ -75,6 +79,7 @@ function ready() {
     if (email.length > 0 && password.length > 0) {
       getAccessToken(email, password,
         function success() {
+          setSavedEmail(email);
           window.location = loginSuccessURL;
         },
         function failure(err) {
@@ -87,6 +92,6 @@ function ready() {
     }
   });
 
-  
+
 }
 </script>
