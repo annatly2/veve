@@ -127,6 +127,7 @@ function ready() {
         console.log(response.errorMsg);
       } else {
         setLocalAccessToken(response.session.token);
+        setSavedEmail(email);
         window.location = loginSuccessURL;
       }
     })
