@@ -21,7 +21,8 @@ module.exports = function(sequelize, DataTypes) {
     Garment.belongsTo(models.User, {
       foreignKey: {
         allowNull: false
-      }
+      },
+      onDelete: "cascade"
     });
   };
 

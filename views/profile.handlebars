@@ -71,7 +71,31 @@
           <button type="submit" class="btn btn-secondary" name="submit" id="submitChanges" disabled>Submit Changes</button>
         </div>
       </div>
+
+      <!-- Delete button -->
+      <div class="form-group row">
+        <div class="col text-center">
+          <button type="button" class="btn btn-danger" name="delete" id="deleteAccount" disabled>Delete My Account</button>
+        </div>
+      </div>
     </form>
+
+    <div class="modal" id="deleteModal" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-danger">Permanently Deleting Account</h5>
+          </div>
+          <div class="modal-body">
+            <p>This action cannot be undone. All clothing and account information will be permanently deleted.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" id="deleteForReal">Delete</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 </div>
@@ -90,12 +114,16 @@ function ready() {
   var passwordField = $("#passwordField");
   var showPasswordCheck = $("#showPassword");
   var submitChanges = $("#submitChanges");
+  var deleteAccount = $("#deleteAccount");
 
   var savedEmail = getSavedEmail();
   if (savedEmail !== null) {
     currentEmailField.val(savedEmail);
     emailField.val(savedEmail);
   }
+  var oldUsername = null;
+  var oldEmail = null;
+  var oldPassword = null;
 
   // Get username from server
   $.ajax({
@@ -107,11 +135,8 @@ function ready() {
     var username = (response.username);
     $('#usernameSpan').text(username);
     usernameField.val(username);
+    oldUsername = username;
   });
-
-  currentEmailField.on("change", function(e) {
-    emailField = $(e.target).val();
-  })
 
   verifyCredentials.click(function(e) {
     e.preventDefault();
@@ -124,8 +149,12 @@ function ready() {
       beforeSend: setBasicAuthHeader(email, password)
     })
     .done(function(response) {
-      // copy email to email field
-      emailField.val(currentEmailField.val());
+      // save old values
+      oldEmail = email;
+      oldPassword = password;
+      // copy email and password to new fields
+      emailField.val(email);
+      passwordField.val(password);
       // disable verification fields
       currentEmailField.attr("disabled", true);
       currentPasswordField.attr("disabled", true);
@@ -140,12 +169,14 @@ function ready() {
       submitChanges.attr("disabled", false);
       submitChanges.removeClass("btn-secondary");
       submitChanges.addClass("btn-info");
+      deleteAccount.attr("disabled", false);
     })
     .fail(function(err) {
       currentPasswordField.addClass("is-invalid");
     })
   })
 
+  // toggle hidden characters in new password field
   showPasswordCheck.change(function() {
     if (this.checked) {
       passwordField.attr("type", "text");
@@ -154,6 +185,7 @@ function ready() {
     }
   })
 
+  // submit new values
   submitChanges.click(function(e) {
     e.preventDefault();
 
@@ -161,17 +193,77 @@ function ready() {
     var email = emailField.val().trim();
     var password = passwordField.val().trim();
 
+    usernameField.removeClass("is-invalid");
+    emailField.removeClass("is-invalid");
     passwordField.removeClass("is-invalid");
 
     var userInfo = {};
-    if (username.length > 0) userInfo.username = username;
-    if (email.length > 0) userInfo.email = email;
-    if (password.length > 0) {
-      if (password.length < 8) {
-        passwordField.addClass("is-invalid");
-        return;
-      }
+    if (username.length > 0) {
+      userInfo.username = username;
+    } else {
+      usernameField.addClass("is-invalid");
+      return;
     }
+    if (email.length > 0) {
+      userInfo.email = email;
+    } else {
+      emailField.addClass("is-invalid");
+      return;
+    }
+    if (password.length < 8) {
+      passwordField.addClass("is-invalid");
+      return;
+    } else {
+      userInfo.password = password;
+    }
+
+    $.ajax({
+      method: "PUT",
+      url: "/api/account",
+      beforeSend: function(xhr) {
+        setBasicAuthHeader(oldEmail, oldPassword)(xhr);
+        setAccessTokenHeader(token)(xhr);
+      },
+      data: userInfo
+    })
+    .done(function(response) {
+      getAccessToken(email, password,
+        function success() {
+          window.location.reload();
+        },
+        function failure() {
+          window.location = "/";
+        }
+      )
+    })
+    .fail(function(err) {
+      console.log(err);
+    })
+  })
+
+  // delete account
+  deleteAccount.click(function() {
+    $("#deleteModal").modal("show");
+  })
+
+  $("#deleteForReal").click(function() {
+    $.ajax({
+      method: "DELETE",
+      url: "/api/account",
+      beforeSend: function(xhr) {
+        setBasicAuthHeader(oldEmail, oldPassword)(xhr);
+        setAccessTokenHeader(token)(xhr);
+      },
+      data: {
+        username: oldUsername
+      }
+    })
+    .done(function(response) {
+      window.location = "/";
+    })
+    .fail(function(err) {
+      console.log(err);
+    })
   })
 
 }
