@@ -33,12 +33,12 @@ module.exports = function() {
     res.render("profile", {layout: "main"});
   });
 
-  // router.get("/outfits", function(req, res) {
-  //   res.locals.metaTags = {
-  //     title: "Outfits"
-  //   };
-  //   res.render("outfits", {layout: "main"});
-  // });
+  router.get("/outfits", function(req, res) {
+    res.locals.metaTags = {
+      title: "Outfits"
+    };
+    res.render("outfits", {layout: "main"});
+  });
 
   router.get("/closets", function(req, res) {
     res.locals.metaTags = {

@@ -15,8 +15,8 @@ function ready() {
 
   function getShopstyleImages(category, callback) {
     var randomOffset = Math.floor(Math.random() * 3000) + 1;
-    console.log(`http://api.shopstyle.com/api/v2/products?pid=${apiKey}&cat=${category}&offset=${randomOffset}&limit=8`)
-    $.get(`http://api.shopstyle.com/api/v2/products?pid=${apiKey}&cat=${category}&offset=${randomOffset}&limit=8`)
+    var apiURL = `https://cors-anywhere.herokuapp.com/api.shopstyle.com/api/v2/products?pid=${apiKey}&cat=${category}&offset=${randomOffset}&limit=8`;
+    $.get(apiURL)
      .done(callback)
   }
 
