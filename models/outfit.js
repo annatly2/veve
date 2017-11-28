@@ -51,7 +51,8 @@ module.exports = function(sequelize, DataTypes) {
     Outfit.belongsTo(models.User, {
       foreignKey: {
         allowNull: false
-      }
+      },
+      onDelete: "cascade"
     });
   };
 

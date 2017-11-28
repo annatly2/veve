@@ -9,7 +9,7 @@
   "test": {
     "username": "veve",
     "password": "veve",
-    "database": "veve",
+    "database": "veve_test",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
