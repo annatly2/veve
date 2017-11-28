@@ -1,6 +1,8 @@
 <div class="container">
-  <div class="row justify-content-center" id="shopstyleContainer">
-
+  <h2 class="text-center">Suggestions From Shopstyle</h2>
+  <div class="row justify-content-center" id="shopstyleContainer"></div>
+  <div class="text-center mt-4">
+    <button type="button" class="btn btn-info" id="loadMore">Load More</button>
   </div>
 </div>
 
@@ -9,11 +11,12 @@ function ready() {
   $("#shopTab").addClass("active bg-info");
   var token = getLocalAccessToken();
 
+  loadSuggestions();
+
   //ajax call to shopstyle collective for shopping suggestions
   //=========================================================================
-  var apiKey = "uid9401-40128451-70";
-
   function getShopstyleImages(category, callback) {
+    var apiKey = "uid9401-40128451-70";
     var randomOffset = Math.floor(Math.random() * 3000) + 1;
     var apiURL = `https://cors-anywhere.herokuapp.com/api.shopstyle.com/api/v2/products?pid=${apiKey}&cat=${category}&offset=${randomOffset}&limit=8`;
     $.get(apiURL)
@@ -33,8 +36,10 @@ function ready() {
   var apiFlags = 0;
   var apiCallCount = 2;
 
-  getShopstyleImages("men", handleResponse);
-  getShopstyleImages("women", handleResponse);
+  function loadSuggestions() {
+    getShopstyleImages("men", handleResponse);
+    getShopstyleImages("women", handleResponse);
+  }
 
   function handleResponse(response) {
     for (var i = 0; i < response.products.length; i++) {
@@ -52,7 +57,13 @@ function ready() {
         var p = products[i];
         drawCard(p.image, p.link);
       }
+      products = [];
+      apiFlags = 0;
     }
   }
+
+  $("#loadMore").click(function() {
+    loadSuggestions();
+  })
 }
 </script>
