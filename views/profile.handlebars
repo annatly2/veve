@@ -1,6 +1,79 @@
 <div class="container">
-  <h1><span id="usernameSpan"></span>'s Profile Page</h1>
+  <h1><span id="usernameSpan">User</span>'s Profile Page</h1>
+  <div>
+    <h4>Enter Current Credentials To Make Changes</h4>
 
+    <form>
+      <!-- Current Email field -->
+      <div class="form-group row">
+        <div class="col">
+          <label for="currentEmailField" class="col-form-label">Email</label>
+          <input type="email" class="form-control" id="currentEmailField" placeholder="Email">
+        </div>
+      </div>
+      <!-- Current Password field -->
+      <div class="form-group row">
+        <div class="col">
+          <label for="currentPasswordField" class="col-form-label">Current Password</label>
+          <input type="password" class="form-control" id="currentPasswordField" placeholder="Password">
+        </div>
+      </div>
+      <!-- Submit  field -->
+      <div class="form-group row">
+        <div class="col text-center">
+          <button type="submit" class="btn btn-info" name="submit" id="checkCredentials">Verify</button>
+        </div>
+      </div>
+    </form>
+
+    <hr>
+
+    <h4>Change Your Information</h4>
+
+    <form>
+      <!-- Username field -->
+      <div class="form-group row">
+        <div class="col">
+          <label for="usernameField" class="col-form-label">Display Name</label>
+          <input type="text" class="form-control" id="usernameField" placeholder="Display Name" disabled>
+          <small id="usernameHelp" class="form-text text-muted">What would you like to be called?</small>
+        </div>
+      </div>
+
+      <!-- Email field -->
+      <div class="form-group row">
+        <div class="col">
+          <label for="emailField" class="col-form-label">Email</label>
+          <input type="email" class="form-control" id="emailField" placeholder="Email" disabled>
+        </div>
+      </div>
+
+      <!-- New Password field -->
+      <div class="form-group row">
+        <div class="col">
+          <label for="passwordField" class="col-form-label">New Password</label>
+          <input type="password" class="form-control" id="passwordField" placeholder="Password" disabled>
+          <small id="passwordHelp" class="form-text text-muted">Must be at least 8 characters long.</small>
+        </div>
+      </div>
+      <div class="form-check row">
+        <div class="col">
+          <label for="showPassword" class="form-label ml-4">
+            <input type="checkbox" class="form-check-input" id="showPassword" disabled>
+            Show Password
+          </label>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="form-group row">
+        <div class="col text-center">
+          <button type="submit" class="btn btn-secondary" name="submit" id="submitChanges" disabled>Submit Changes</button>
+        </div>
+      </div>
+    </form>
+
+  </div>
 </div>
 <script type="text/javascript">
 function ready() {
@@ -8,15 +81,98 @@ function ready() {
   automaticTokenCheck();
   var token = getLocalAccessToken();
 
+  var currentEmailField = $("#currentEmailField");
+  var currentPasswordField = $("#currentPasswordField");
+  var verifyCredentials = $("#checkCredentials");
+
+  var usernameField = $("#usernameField");
+  var emailField = $("#emailField");
+  var passwordField = $("#passwordField");
+  var showPasswordCheck = $("#showPassword");
+  var submitChanges = $("#submitChanges");
+
+  var savedEmail = getSavedEmail();
+  if (savedEmail !== null) {
+    currentEmailField.val(savedEmail);
+    emailField.val(savedEmail);
+  }
+
+  // Get username from server
   $.ajax({
     url: "/api/username",
     method: "GET",
     beforeSend: setAccessTokenHeader(token)
   })
-  .done (function(response){
-    console.log(response.username);
+  .done(function(response) {
     var username = (response.username);
-    $('#usernameSpan').append(username);
+    $('#usernameSpan').text(username);
+    usernameField.val(username);
   });
+
+  currentEmailField.on("change", function(e) {
+    emailField = $(e.target).val();
+  })
+
+  verifyCredentials.click(function(e) {
+    e.preventDefault();
+    var email = currentEmailField.val().trim();
+    var password = currentPasswordField.val().trim();
+    currentPasswordField.removeClass("is-invalid");
+    $.ajax({
+      method: "GET",
+      url: "/api/token",
+      beforeSend: setBasicAuthHeader(email, password)
+    })
+    .done(function(response) {
+      // copy email to email field
+      emailField.val(currentEmailField.val());
+      // disable verification fields
+      currentEmailField.attr("disabled", true);
+      currentPasswordField.attr("disabled", true);
+      verifyCredentials.attr("disabled", true);
+      verifyCredentials.removeClass("btn-info");
+      verifyCredentials.addClass("btn-secondary");
+      // enable other fields
+      usernameField.attr("disabled", false);
+      emailField.attr("disabled", false);
+      passwordField.attr("disabled", false);
+      showPasswordCheck.attr("disabled", false);
+      submitChanges.attr("disabled", false);
+      submitChanges.removeClass("btn-secondary");
+      submitChanges.addClass("btn-info");
+    })
+    .fail(function(err) {
+      currentPasswordField.addClass("is-invalid");
+    })
+  })
+
+  showPasswordCheck.change(function() {
+    if (this.checked) {
+      passwordField.attr("type", "text");
+    } else {
+      passwordField.attr("type", "password");
+    }
+  })
+
+  submitChanges.click(function(e) {
+    e.preventDefault();
+
+    var username = usernameField.val().trim();
+    var email = emailField.val().trim();
+    var password = passwordField.val().trim();
+
+    passwordField.removeClass("is-invalid");
+
+    var userInfo = {};
+    if (username.length > 0) userInfo.username = username;
+    if (email.length > 0) userInfo.email = email;
+    if (password.length > 0) {
+      if (password.length < 8) {
+        passwordField.addClass("is-invalid");
+        return;
+      }
+    }
+  })
+
 }
 </script>
